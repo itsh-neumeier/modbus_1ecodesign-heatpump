@@ -7,12 +7,14 @@ from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT
 from homeassistant.core import HomeAssistant
 
 from .const import CONF_SLAVE, DEFAULT_TIMEOUT, DOMAIN, PLATFORMS
-from .coordinator import Modbus1EcoDesignUpdateCoordinator
-from .modbus import Modbus1EcoDesignClient
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Modbus 1EcoDesign Heatpump from config entry."""
+    # Import lazily so config flow can still load even if requirements are not ready yet.
+    from .coordinator import Modbus1EcoDesignUpdateCoordinator
+    from .modbus import Modbus1EcoDesignClient
+
     client = Modbus1EcoDesignClient(
         host=entry.data[CONF_HOST],
         port=entry.data[CONF_PORT],

@@ -18,7 +18,6 @@ from .const import (
     DOMAIN,
     MIN_SCAN_INTERVAL,
 )
-from .modbus import ModbusConnectionError, ModbusReadError, async_validate_connection
 
 
 class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -29,6 +28,20 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input: dict[str, object] | None = None) -> FlowResult:
         errors: dict[str, str] = {}
         if user_input is not None:
+            try:
+                from .modbus import (
+                    ModbusConnectionError,
+                    ModbusReadError,
+                    async_validate_connection,
+                )
+            except ModuleNotFoundError:
+                errors["base"] = "missing_dependency"
+                return self.async_show_form(
+                    step_id="user",
+                    data_schema=_user_schema(user_input),
+                    errors=errors,
+                )
+
             try:
                 await async_validate_connection(
                     host=str(user_input[CONF_HOST]),

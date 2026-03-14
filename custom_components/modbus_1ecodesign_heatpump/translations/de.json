@@ -18,6 +18,7 @@
     "error": {
       "cannot_connect": "Verbindung zum Modbus-Endpunkt nicht moeglich",
       "invalid_response": "Geraet lieferte ungueltige Modbus-Daten",
+      "missing_dependency": "Python-Abhaengigkeit fehlt. Bitte Home-Assistant-Logs pruefen.",
       "unknown": "Unerwarteter Fehler"
     },
     "abort": {
@@ -37,4 +38,3 @@
     }
   }
 }
-

@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-03-14
+
+### Fixed
+- Prevented config-flow import crash by lazy-loading Modbus dependencies.
+- Added explicit user-facing error if Python dependency is missing.
+- Relaxed `pymodbus` requirement to improve installation compatibility.
+
 ## [0.1.2] - 2026-03-14
 
 ### Fixed
@@ -29,6 +36,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
-[0.1.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.1
+[0.1.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.3
 [0.1.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.2
+[0.1.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.1
 [0.1.0]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.0
