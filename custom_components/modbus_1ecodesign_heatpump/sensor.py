@@ -140,7 +140,7 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
         self.entity_description = description
 
     @property
-    def native_value(self) -> float | int | None:
+    def native_value(self) -> float | int | str | None:
         raw = self._read_register(
             register_type=self.entity_description.register_type,
             address=self.entity_description.address,
@@ -148,13 +148,23 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
         if raw is None:
             return None
 
+        if self.entity_description.bit_flags is not None:
+            active_flags = [
+                label
+                for mask, label in self.entity_description.bit_flags.items()
+                if raw & mask
+            ]
+            if not active_flags:
+                return "Keine"
+            return ", ".join(active_flags)
+
         value = (raw * self.entity_description.scale) + self.entity_description.offset
         if self.entity_description.scale != 1.0:
             return round(value, self.entity_description.suggested_display_precision or 1)
         return int(value)
 
     @property
-    def extra_state_attributes(self) -> dict[str, list[str]] | None:
+    def extra_state_attributes(self) -> dict[str, int | list[str]] | None:
         if self.entity_description.bit_flags is None:
             return None
         raw = self._read_register(
@@ -168,4 +178,7 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
             for mask, label in self.entity_description.bit_flags.items()
             if raw & mask
         ]
-        return {"active_flags": active_flags}
+        return {
+            "raw_value": raw,
+            "active_flags": active_flags,
+        }

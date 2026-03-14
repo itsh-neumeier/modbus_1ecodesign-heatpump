@@ -78,7 +78,8 @@ Es wird vor dem Speichern eine echte Modbus-Lesepruefung ausgefuehrt.
 
 `Status` und `Unit Alarm` bleiben je eine einzelne Sensor-Entitaet
 (`status_bits`, `unit_alarm_bits`).
-Die dekodierten Texte stehen im Attribut `active_flags`.
+Der Zustand enthaelt die dekodierten Flag-Texte; `active_flags` und `raw_value`
+stehen zusaetzlich als Attribute zur Verfuegung.
 
 ### Number
 

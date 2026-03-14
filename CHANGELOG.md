@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.10] - 2026-03-14
+
+### Changed
+- `status_bits` and `unit_alarm_bits` now output decoded flag texts as sensor state
+  (no numeric state output).
+- Added `raw_value` attribute so the original register value is still available.
+
 ## [0.1.9] - 2026-03-14
 
 ### Changed
@@ -92,6 +99,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.10]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.10
 [0.1.9]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.9
 [0.1.8]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.8
 [0.1.7]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.7

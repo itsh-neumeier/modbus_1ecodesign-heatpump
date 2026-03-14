@@ -78,7 +78,7 @@ The integration performs a real Modbus read check before saving config.
 - `Relay Fan` (14)
 
 `Status` and `Unit Alarm` stay single sensor entities (`status_bits`, `unit_alarm_bits`).
-Decoded texts are exposed via the `active_flags` attribute.
+State contains decoded text flags; `active_flags` and `raw_value` are exposed as attributes.
 
 ### Number Controls
 
