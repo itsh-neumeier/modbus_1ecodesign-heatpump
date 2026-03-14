@@ -28,7 +28,7 @@ Waermepumpen (ED300KWL / VC200) ueber Modbus TCP.
 
 1. HACS -> Integrations oeffnen.
 2. Custom Repository hinzufuegen:
-   `https://github.com/your-github-user/modbus_1ecodesign-heatpump`
+   `https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump`
    als Kategorie `Integration`.
 3. **Modbus 1EcoDesign Heatpump** installieren.
 4. Home Assistant neu starten.
@@ -175,4 +175,3 @@ Siehe [CHANGELOG.md](CHANGELOG.md).
 ## Lizenz
 
 MIT - siehe [LICENSE](LICENSE).
-

@@ -28,7 +28,7 @@ HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 
 1. Open HACS -> Integrations.
 2. Add custom repository:
-   `https://github.com/your-github-user/modbus_1ecodesign-heatpump`
+   `https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump`
    as category `Integration`.
 3. Install **Modbus 1EcoDesign Heatpump**.
 4. Restart Home Assistant.
@@ -178,4 +178,3 @@ See [CHANGELOG.md](CHANGELOG.md).
 ## License
 
 MIT - see [LICENSE](LICENSE).
-
