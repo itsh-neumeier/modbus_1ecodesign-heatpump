@@ -70,16 +70,107 @@
       "ec_fan_level3": { "name": "EC Fan Level 3" }
     },
     "select": {
-      "heating_mode": { "name": "Heating Mode" },
-      "legionella_function": { "name": "Legionella Function" },
-      "fan_operation": { "name": "Fan Operation" },
-      "ventilation_control": { "name": "Ventilation Control" },
-      "pv_mode": { "name": "PV Mode" },
-      "holiday_mode": { "name": "Holiday Mode" },
-      "fan_pause": { "name": "Fan Pause" },
-      "language": { "name": "Language" },
-      "defrost_mode": { "name": "Defrost Mode" },
-      "fan_type": { "name": "Fan Type" }
+      "heating_mode": {
+        "name": "Heating Mode",
+        "state": {
+          "off": "Off",
+          "only_hp": "Only HP",
+          "only_el": "Only EL",
+          "hp_plus_el": "HP + EL",
+          "boiler": "Boiler",
+          "hp_plus_boiler": "HP + Boiler"
+        }
+      },
+      "legionella_function": {
+        "name": "Legionella Function",
+        "state": {
+          "off": "Off",
+          "temp_60c": "60 C",
+          "temp_65c": "65 C"
+        }
+      },
+      "fan_operation": {
+        "name": "Fan Operation",
+        "state": {
+          "off": "Off",
+          "ec_low": "EC Low",
+          "ec_mid": "EC Mid",
+          "ec_high": "EC High"
+        }
+      },
+      "ventilation_control": {
+        "name": "Ventilation Control",
+        "state": {
+          "off": "Off",
+          "ec_low": "EC Low",
+          "ec_mid": "EC Mid",
+          "ec_high": "EC High"
+        }
+      },
+      "pv_mode": {
+        "name": "PV Mode",
+        "state": {
+          "off": "Off",
+          "only_hp": "Only HP",
+          "only_el": "Only EL",
+          "hp_plus_el": "HP + EL"
+        }
+      },
+      "holiday_mode": {
+        "name": "Holiday Mode",
+        "state": {
+          "off": "Off",
+          "one_week": "1 Week",
+          "two_weeks": "2 Weeks",
+          "three_weeks": "3 Weeks",
+          "three_days": "3 Days",
+          "manual": "Manual"
+        }
+      },
+      "fan_pause": {
+        "name": "Fan Pause",
+        "state": {
+          "off": "Off",
+          "m30_s15": "30m / 15s",
+          "m30_s30": "30m / 30s",
+          "m60_s15": "60m / 15s",
+          "m60_s30": "60m / 30s",
+          "m90_s15": "90m / 15s",
+          "m90_s30": "90m / 30s"
+        }
+      },
+      "language": {
+        "name": "Language",
+        "state": {
+          "english": "English",
+          "german": "German",
+          "french": "French",
+          "dutch": "Dutch",
+          "spanish": "Spanish",
+          "italian": "Italian",
+          "danish": "Danish",
+          "swedish": "Swedish",
+          "norwegian": "Norwegian",
+          "polish": "Polish",
+          "slovenian": "Slovenian",
+          "croatian": "Croatian"
+        }
+      },
+      "defrost_mode": {
+        "name": "Defrost Mode",
+        "state": {
+          "air": "Air",
+          "gas": "Gas",
+          "tmin_rf": "Tmin RF"
+        }
+      },
+      "fan_type": {
+        "name": "Fan Type",
+        "state": {
+          "ac": "AC",
+          "ec": "EC"
+        }
+      }
     },
     "switch": {
       "timer_enabled": { "name": "Timer Enabled" },

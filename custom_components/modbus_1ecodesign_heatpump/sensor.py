@@ -20,6 +20,56 @@ from .const import DOMAIN
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_INPUT
 
+STATUS_FLAG_LABELS = {
+    "status_off": {"de": "Aus", "en": "Off"},
+    "status_ready": {"de": "Betriebsbereit", "en": "Ready"},
+    "status_running": {"de": "In Betrieb", "en": "Running"},
+    "status_legionella_mode": {"de": "Legionellenmodus", "en": "Legionella mode"},
+    "status_legionella_mode_end": {"de": "Legionellenmodus-Ende", "en": "Legionella mode end"},
+    "status_defrost": {"de": "Abtau", "en": "Defrost"},
+    "status_defrost_end": {"de": "Abtau-Ende", "en": "Defrost end"},
+    "status_fault": {"de": "Stoerung", "en": "Fault"},
+    "status_boost": {"de": "Boost", "en": "Boost"},
+    "status_hp_locked": {"de": "WP Gesperrt", "en": "Heat pump locked"},
+    "status_holiday": {"de": "Ferien", "en": "Holiday"},
+    "status_sg_enabled": {"de": "SG-ENABLED", "en": "SG-ENABLED"},
+    "status_pv_hp": {"de": "PV-WP", "en": "PV-HP"},
+    "status_pv_el": {"de": "PV-EL", "en": "PV-EL"},
+    "status_pv_hp_el": {"de": "PV-WP+EL", "en": "PV-HP+EL"},
+}
+
+ALARM_FLAG_LABELS = {
+    "alarm_tank_sensor_short": {
+        "de": "Speicherfuehler: Kurzschluss",
+        "en": "Tank sensor: short circuit",
+    },
+    "alarm_tank_sensor_open": {
+        "de": "Speicherfuehler: Unterbrechung",
+        "en": "Tank sensor: open circuit",
+    },
+    "alarm_evaporator_sensor_short": {
+        "de": "Verdampferfuehler: Kurzschluss",
+        "en": "Evaporator sensor: short circuit",
+    },
+    "alarm_evaporator_sensor_open": {
+        "de": "Verdampferfuehler: Unterbrechung",
+        "en": "Evaporator sensor: open circuit",
+    },
+    "alarm_pressostat_first": {"de": "1ste Pressostat Meldung", "en": "1st pressostat warning"},
+    "alarm_pressostat_fault": {"de": "Pressostat Stoerung", "en": "Pressostat fault"},
+    "alarm_check_anode": {"de": "Anode kontrollieren", "en": "Check anode"},
+    "alarm_legio_temp_not_reached": {
+        "de": "Legio Temperatur nicht erreicht",
+        "en": "Legionella temperature not reached",
+    },
+    "alarm_set_clock": {"de": "Uhrzeit einstellen!", "en": "Set clock!"},
+}
+
+NO_FLAGS_TEXT = {
+    "de": "Keine",
+    "en": "None",
+}
+
 
 @dataclass(frozen=True, kw_only=True)
 class ModbusSensorDescription(SensorEntityDescription):
@@ -30,6 +80,7 @@ class ModbusSensorDescription(SensorEntityDescription):
     scale: float = 1.0
     offset: float = 0.0
     bit_flags: dict[int, str] | None = None
+    bit_label_map: dict[str, dict[str, str]] | None = None
 
 
 SENSOR_TYPES: tuple[ModbusSensorDescription, ...] = (
@@ -66,22 +117,23 @@ SENSOR_TYPES: tuple[ModbusSensorDescription, ...] = (
         icon="mdi:information-outline",
         entity_category=EntityCategory.DIAGNOSTIC,
         bit_flags={
-            1: "Aus",
-            2: "Betriebsbereit",
-            4: "In Betrieb",
-            8: "Legionellenmodus",
-            32: "Legionellenmodus-Ende",
-            64: "Abtau",
-            128: "Abtau-Ende",
-            256: "Stoerung",
-            512: "Boost",
-            1024: "WP Gesperrt",
-            2048: "Ferien",
-            4096: "SG-ENABLED",
-            8192: "PV-WP",
-            16384: "PV-EL",
-            32768: "PV-WP+EL",
+            1: "status_off",
+            2: "status_ready",
+            4: "status_running",
+            8: "status_legionella_mode",
+            32: "status_legionella_mode_end",
+            64: "status_defrost",
+            128: "status_defrost_end",
+            256: "status_fault",
+            512: "status_boost",
+            1024: "status_hp_locked",
+            2048: "status_holiday",
+            4096: "status_sg_enabled",
+            8192: "status_pv_hp",
+            16384: "status_pv_el",
+            32768: "status_pv_hp_el",
         },
+        bit_label_map=STATUS_FLAG_LABELS,
     ),
     ModbusSensorDescription(
         key="unit_alarm_bits",
@@ -90,16 +142,17 @@ SENSOR_TYPES: tuple[ModbusSensorDescription, ...] = (
         icon="mdi:alarm-light-outline",
         entity_category=EntityCategory.DIAGNOSTIC,
         bit_flags={
-            1 << 0: "Speicherfuehler: Kurzschluss",
-            1 << 1: "Speicherfuehler: Unterbrechung",
-            1 << 2: "Verdampferfuehler: Kurzschluss",
-            1 << 3: "Verdampferfuehler: Unterbrechung",
-            1 << 4: "1ste Pressostat Meldung",
-            1 << 5: "Pressostat Stoerung",
-            1 << 6: "Anode kontrollieren",
-            1 << 7: "Legio Temperatur nicht erreicht",
-            1 << 8: "Uhrzeit einstellen!",
+            1 << 0: "alarm_tank_sensor_short",
+            1 << 1: "alarm_tank_sensor_open",
+            1 << 2: "alarm_evaporator_sensor_short",
+            1 << 3: "alarm_evaporator_sensor_open",
+            1 << 4: "alarm_pressostat_first",
+            1 << 5: "alarm_pressostat_fault",
+            1 << 6: "alarm_check_anode",
+            1 << 7: "alarm_legio_temp_not_reached",
+            1 << 8: "alarm_set_clock",
         },
+        bit_label_map=ALARM_FLAG_LABELS,
     ),
     ModbusSensorDescription(
         key="firmware_version",
@@ -149,13 +202,9 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
             return None
 
         if self.entity_description.bit_flags is not None:
-            active_flags = [
-                label
-                for mask, label in self.entity_description.bit_flags.items()
-                if raw & mask
-            ]
+            active_flags = self._active_flags(raw)
             if not active_flags:
-                return "Keine"
+                return self._localized_no_flags_text()
             return ", ".join(active_flags)
 
         value = (raw * self.entity_description.scale) + self.entity_description.offset
@@ -173,12 +222,30 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
         )
         if raw is None:
             return None
-        active_flags = [
-            label
-            for mask, label in self.entity_description.bit_flags.items()
-            if raw & mask
-        ]
+        active_flags = self._active_flags(raw)
         return {
             "raw_value": raw,
             "active_flags": active_flags,
         }
+
+    def _active_flags(self, raw: int) -> list[str]:
+        bit_flags = self.entity_description.bit_flags or {}
+        return [
+            self._localize_flag(flag_key)
+            for mask, flag_key in bit_flags.items()
+            if raw & mask
+        ]
+
+    def _localize_flag(self, flag_key: str) -> str:
+        labels = self.entity_description.bit_label_map or {}
+        localized = labels.get(flag_key, {})
+        language = self._language_code()
+        return localized.get(language, localized.get("en", flag_key))
+
+    def _localized_no_flags_text(self) -> str:
+        language = self._language_code()
+        return NO_FLAGS_TEXT.get(language, NO_FLAGS_TEXT["en"])
+
+    def _language_code(self) -> str:
+        language = (self.hass.config.language or "en").lower()
+        return "de" if language.startswith("de") else "en"

@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.11] - 2026-03-14
+
+### Changed
+- Added translated select option values (state translations) for EN/DE
+  (e.g. heating modes, PV mode, fan modes, defrost mode).
+- Localized `status_bits` and `unit_alarm_bits` decoded values for EN/DE.
+
 ## [0.1.10] - 2026-03-14
 
 ### Changed
@@ -99,6 +106,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.11]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.11
 [0.1.10]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.10
 [0.1.9]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.9
 [0.1.8]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.8
