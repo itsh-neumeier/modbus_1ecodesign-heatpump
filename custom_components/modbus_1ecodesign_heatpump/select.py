@@ -27,7 +27,7 @@ class ModbusSelectDescription(SelectEntityDescription):
 SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
     ModbusSelectDescription(
         key="heating_mode",
-        name="Heating Mode",
+        translation_key="heating_mode",
         address=12,
         option_map={
             0: "Off",
@@ -41,40 +41,41 @@ SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
     ),
     ModbusSelectDescription(
         key="legionella_function",
-        name="Legionella Function",
+        translation_key="legionella_function",
         address=13,
         option_map={0: "Off", 1: "60 C", 2: "65 C"},
         entity_category=EntityCategory.CONFIG,
     ),
     ModbusSelectDescription(
         key="fan_operation",
-        name="Fan Operation",
+        translation_key="fan_operation",
         address=15,
         option_map={0: "Off", 1: "EC Low", 2: "EC Mid", 3: "EC High"},
         entity_category=EntityCategory.CONFIG,
     ),
     ModbusSelectDescription(
         key="ventilation_control",
-        name="Ventilation Control",
+        translation_key="ventilation_control",
         address=16,
         option_map={0: "Off", 1: "EC Low", 2: "EC Mid", 3: "EC High"},
         entity_category=EntityCategory.CONFIG,
     ),
     ModbusSelectDescription(
         key="pv_mode",
-        name="PV Mode",
+        translation_key="pv_mode",
         address=17,
         option_map={0: "Off", 1: "Only HP", 2: "Only EL", 3: "HP + EL"},
     ),
     ModbusSelectDescription(
         key="holiday_mode",
-        name="Holiday Mode",
+        translation_key="holiday_mode",
         address=20,
         option_map={0: "Off", 1: "1 Week", 2: "2 Weeks", 3: "3 Weeks", 4: "3 Days", 5: "Manual"},
+        entity_registry_enabled_default=False,
     ),
     ModbusSelectDescription(
         key="fan_pause",
-        name="Fan Pause",
+        translation_key="fan_pause",
         address=23,
         option_map={
             0: "Off",
@@ -86,10 +87,11 @@ SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
             6: "90m/30s",
         },
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
     ),
     ModbusSelectDescription(
         key="language",
-        name="Language",
+        translation_key="language",
         address=25,
         option_map={
             0: "English",
@@ -106,20 +108,23 @@ SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
             11: "Croatian",
         },
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
     ),
     ModbusSelectDescription(
         key="defrost_mode",
-        name="Defrost Mode",
+        translation_key="defrost_mode",
         address=26,
         option_map={0: "Air", 1: "Gas", 2: "Tmin RF"},
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
     ),
     ModbusSelectDescription(
         key="fan_type",
-        name="Fan Type",
+        translation_key="fan_type",
         address=29,
         option_map={0: "AC", 1: "EC"},
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
     ),
 )
 

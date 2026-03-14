@@ -75,10 +75,10 @@ Es wird vor dem Speichern eine echte Modbus-Lesepruefung ausgefuehrt.
 - Relay Solenoid Valve (12)
 - Relay Condenser (13)
 - Relay Fan (14)
-- Status-Bit Sensoren aus Input Register 16
-  (Aus, Betriebsbereit, In Betrieb, Legionellenmodus, Abtau, Boost, PV, ...)
-- Unit-Alarm Bit Sensoren aus Input Register 18
-  (Speicherfuehler, Verdampferfuehler, Pressostat, Anode, Uhrzeit, ...)
+
+`Status` und `Unit Alarm` bleiben je eine einzelne Sensor-Entitaet
+(`status_bits`, `unit_alarm_bits`).
+Die dekodierten Texte stehen im Attribut `active_flags`.
 
 ### Number
 

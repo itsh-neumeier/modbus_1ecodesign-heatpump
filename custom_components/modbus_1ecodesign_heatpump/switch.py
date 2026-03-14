@@ -28,23 +28,25 @@ class ModbusSwitchDescription(SwitchEntityDescription):
 SWITCH_TYPES: tuple[ModbusSwitchDescription, ...] = (
     ModbusSwitchDescription(
         key="timer_enabled",
-        name="Timer Enabled",
+        translation_key="timer_enabled",
         address=7,
         icon="mdi:timer-outline",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
     ),
     ModbusSwitchDescription(
         key="boost_enabled",
-        name="Boost Enabled",
+        translation_key="boost_enabled",
         address=22,
         icon="mdi:rocket-launch-outline",
     ),
     ModbusSwitchDescription(
         key="anode_enabled",
-        name="Anode Enabled",
+        translation_key="anode_enabled",
         address=27,
         icon="mdi:lightning-bolt-outline",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
     ),
 )
 

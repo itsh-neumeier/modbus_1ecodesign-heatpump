@@ -40,30 +40,51 @@
   },
   "entity": {
     "binary_sensor": {
-      "status_bit_off": { "name": "Status: Off" },
-      "status_bit_ready": { "name": "Status: Ready" },
-      "status_bit_running": { "name": "Status: Running" },
-      "status_bit_legionella": { "name": "Status: Legionella mode" },
-      "status_bit_legionella_end": { "name": "Status: Legionella mode end" },
-      "status_bit_defrost": { "name": "Status: Defrost" },
-      "status_bit_defrost_end": { "name": "Status: Defrost end" },
-      "status_bit_fault": { "name": "Status: Fault" },
-      "status_bit_boost": { "name": "Status: Boost" },
-      "status_bit_hp_locked": { "name": "Status: Heat pump locked" },
-      "status_bit_holiday": { "name": "Status: Holiday" },
-      "status_bit_sg_enabled": { "name": "Status: SG enabled" },
-      "status_bit_pv_hp": { "name": "Status: PV HP" },
-      "status_bit_pv_el": { "name": "Status: PV EL" },
-      "status_bit_pv_hp_el": { "name": "Status: PV HP+EL" },
-      "alarm_bit_tank_sensor_short": { "name": "Alarm: Tank sensor short circuit" },
-      "alarm_bit_tank_sensor_open": { "name": "Alarm: Tank sensor open circuit" },
-      "alarm_bit_evaporator_sensor_short": { "name": "Alarm: Evaporator sensor short circuit" },
-      "alarm_bit_evaporator_sensor_open": { "name": "Alarm: Evaporator sensor open circuit" },
-      "alarm_bit_pressostat_first": { "name": "Alarm: First pressostat warning" },
-      "alarm_bit_pressostat_fault": { "name": "Alarm: Pressostat fault" },
-      "alarm_bit_check_anode": { "name": "Alarm: Check anode" },
-      "alarm_bit_legio_temp_not_reached": { "name": "Alarm: Legionella temperature not reached" },
-      "alarm_bit_set_clock": { "name": "Alarm: Set clock" }
+      "di1_pressostat": { "name": "DI1 Pressostat" },
+      "di2_pv_input": { "name": "DI2 PV Input" },
+      "relay_compressor": { "name": "Relay Compressor" },
+      "relay_electric_heater": { "name": "Relay Electric Heater" },
+      "relay_boiler": { "name": "Relay Boiler" },
+      "relay_solenoid_valve": { "name": "Relay Solenoid Valve" },
+      "relay_condenser": { "name": "Relay Condenser" },
+      "relay_fan": { "name": "Relay Fan" }
+    },
+    "sensor": {
+      "t1_evaporator_temperature": { "name": "T1 Evaporator Temperature" },
+      "t2_tank_temperature": { "name": "T2 Tank Temperature" },
+      "remaining_holiday_days": { "name": "Remaining Holiday Days" },
+      "status_bits": { "name": "Status Bits" },
+      "unit_alarm_bits": { "name": "Unit Alarm Bits" },
+      "firmware_version": { "name": "Firmware Version" }
+    },
+    "number": {
+      "water_setpoint": { "name": "Water Setpoint" },
+      "t_min": { "name": "T min" },
+      "t2_min": { "name": "T2 min" },
+      "pv_hp_setpoint": { "name": "PV HP Setpoint" },
+      "pv_el_setpoint": { "name": "PV EL Setpoint" },
+      "manual_holiday_days": { "name": "Manual Holiday Days" },
+      "t_max": { "name": "T max" },
+      "ec_fan_level1": { "name": "EC Fan Level 1" },
+      "ec_fan_level2": { "name": "EC Fan Level 2" },
+      "ec_fan_level3": { "name": "EC Fan Level 3" }
+    },
+    "select": {
+      "heating_mode": { "name": "Heating Mode" },
+      "legionella_function": { "name": "Legionella Function" },
+      "fan_operation": { "name": "Fan Operation" },
+      "ventilation_control": { "name": "Ventilation Control" },
+      "pv_mode": { "name": "PV Mode" },
+      "holiday_mode": { "name": "Holiday Mode" },
+      "fan_pause": { "name": "Fan Pause" },
+      "language": { "name": "Language" },
+      "defrost_mode": { "name": "Defrost Mode" },
+      "fan_type": { "name": "Fan Type" }
+    },
+    "switch": {
+      "timer_enabled": { "name": "Timer Enabled" },
+      "boost_enabled": { "name": "Boost Enabled" },
+      "anode_enabled": { "name": "Anode Enabled" }
     }
   }
 }

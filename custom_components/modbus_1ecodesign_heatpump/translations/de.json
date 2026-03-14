@@ -40,30 +40,51 @@
   },
   "entity": {
     "binary_sensor": {
-      "status_bit_off": { "name": "Status: Aus" },
-      "status_bit_ready": { "name": "Status: Betriebsbereit" },
-      "status_bit_running": { "name": "Status: In Betrieb" },
-      "status_bit_legionella": { "name": "Status: Legionellenmodus" },
-      "status_bit_legionella_end": { "name": "Status: Legionellenmodus Ende" },
-      "status_bit_defrost": { "name": "Status: Abtau" },
-      "status_bit_defrost_end": { "name": "Status: Abtau Ende" },
-      "status_bit_fault": { "name": "Status: Stoerung" },
-      "status_bit_boost": { "name": "Status: Boost" },
-      "status_bit_hp_locked": { "name": "Status: WP gesperrt" },
-      "status_bit_holiday": { "name": "Status: Ferien" },
-      "status_bit_sg_enabled": { "name": "Status: SG aktiviert" },
-      "status_bit_pv_hp": { "name": "Status: PV-WP" },
-      "status_bit_pv_el": { "name": "Status: PV-EL" },
-      "status_bit_pv_hp_el": { "name": "Status: PV-WP+EL" },
-      "alarm_bit_tank_sensor_short": { "name": "Alarm: Speicherfuehler Kurzschluss" },
-      "alarm_bit_tank_sensor_open": { "name": "Alarm: Speicherfuehler Unterbrechung" },
-      "alarm_bit_evaporator_sensor_short": { "name": "Alarm: Verdampferfuehler Kurzschluss" },
-      "alarm_bit_evaporator_sensor_open": { "name": "Alarm: Verdampferfuehler Unterbrechung" },
-      "alarm_bit_pressostat_first": { "name": "Alarm: Erste Pressostat Meldung" },
-      "alarm_bit_pressostat_fault": { "name": "Alarm: Pressostat Stoerung" },
-      "alarm_bit_check_anode": { "name": "Alarm: Anode kontrollieren" },
-      "alarm_bit_legio_temp_not_reached": { "name": "Alarm: Legio Temperatur nicht erreicht" },
-      "alarm_bit_set_clock": { "name": "Alarm: Uhrzeit einstellen" }
+      "di1_pressostat": { "name": "Kontakt 1: Pressostat" },
+      "di2_pv_input": { "name": "Kontakt 2: SG-Ready" },
+      "relay_compressor": { "name": "Relais 1: Kompressor" },
+      "relay_electric_heater": { "name": "Relais 2: Heizstab (EL)" },
+      "relay_boiler": { "name": "Relais 3: Kessel" },
+      "relay_solenoid_valve": { "name": "Relais 4: Magnetventil" },
+      "relay_condenser": { "name": "Relais 6: Kondensator" },
+      "relay_fan": { "name": "Relais 7: Ventilator" }
+    },
+    "sensor": {
+      "t1_evaporator_temperature": { "name": "Temperatur: T1 (Verdampfer)" },
+      "t2_tank_temperature": { "name": "Temperatur: T2 (Speicher)" },
+      "remaining_holiday_days": { "name": "Abwesenheit: Verbleibend" },
+      "status_bits": { "name": "Status" },
+      "unit_alarm_bits": { "name": "Unit Alarm" },
+      "firmware_version": { "name": "FW Version" }
+    },
+    "number": {
+      "water_setpoint": { "name": "Temperatur: T Soll" },
+      "t_min": { "name": "Temperatur: T min" },
+      "t2_min": { "name": "Temperatur: T2 min" },
+      "pv_hp_setpoint": { "name": "Temperatur: T.PV_WP" },
+      "pv_el_setpoint": { "name": "Temperatur: T.PV_EL" },
+      "manual_holiday_days": { "name": "Abwesenheit: Manuell" },
+      "t_max": { "name": "Temperatur: T max" },
+      "ec_fan_level1": { "name": "EC LS1" },
+      "ec_fan_level2": { "name": "EC LS2" },
+      "ec_fan_level3": { "name": "EC LS3" }
+    },
+    "select": {
+      "heating_mode": { "name": "Betriebsmodus: Standard" },
+      "legionella_function": { "name": "Temperatur: T Legio" },
+      "fan_operation": { "name": "WP_LS" },
+      "ventilation_control": { "name": "KWL (Raumlueftung)" },
+      "pv_mode": { "name": "Betriebsmodus: PV/SG" },
+      "holiday_mode": { "name": "Abwesenheit: Zustand" },
+      "fan_pause": { "name": "Luefterpause" },
+      "language": { "name": "Sprache" },
+      "defrost_mode": { "name": "Abtauart" },
+      "fan_type": { "name": "Lueftertyp" }
+    },
+    "switch": {
+      "timer_enabled": { "name": "Zeitplanung: Zustand" },
+      "boost_enabled": { "name": "Boost" },
+      "anode_enabled": { "name": "Anode" }
     }
   }
 }

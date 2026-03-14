@@ -6,7 +6,7 @@ from homeassistant.const import Platform
 
 DOMAIN = "modbus_1ecodesign_heatpump"
 DEFAULT_NAME = "1EcoDesign Heatpump"
-MANUFACTURER = "1EcoDesign"
+MANUFACTURER = "1EcoDesign GmbH"
 MODEL = "ED300KWL / VC200"
 
 CONF_SLAVE = "slave"
@@ -24,4 +24,3 @@ PLATFORMS: list[Platform] = [
     Platform.SELECT,
     Platform.SWITCH,
 ]
-
