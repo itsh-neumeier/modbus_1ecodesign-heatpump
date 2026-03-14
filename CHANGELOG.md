@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-03-14
+
+### Fixed
+- Added compatibility for multiple `pymodbus` 3.x APIs (`device_id` and legacy `slave`).
+- Fixed config-flow submit crash that appeared as `Unexpected error`.
+- Added exception logging in config validation to simplify troubleshooting.
+
 ## [0.1.3] - 2026-03-14
 
 ### Fixed
@@ -36,6 +43,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.4]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.4
 [0.1.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.3
 [0.1.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.2
 [0.1.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.1

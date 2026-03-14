@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PORT, CONF_SCAN_INTERVAL, CONF_TIMEOUT
@@ -18,6 +20,8 @@ from .const import (
     DOMAIN,
     MIN_SCAN_INTERVAL,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -54,6 +58,7 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except ModbusReadError:
                 errors["base"] = "invalid_response"
             except Exception:
+                _LOGGER.exception("Unexpected error during Modbus validation")
                 errors["base"] = "unknown"
             else:
                 unique_id = (

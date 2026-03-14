@@ -66,16 +66,16 @@ class Modbus1EcoDesignClient:
 
             for block in blocks:
                 if block.register_type == REGISTER_TYPE_INPUT:
-                    response = await client.read_input_registers(
+                    response = await self._async_read_input_registers(
+                        client=client,
                         address=block.start,
                         count=block.count,
-                        slave=self._slave,
                     )
                 else:
-                    response = await client.read_holding_registers(
+                    response = await self._async_read_holding_registers(
+                        client=client,
                         address=block.start,
                         count=block.count,
-                        slave=self._slave,
                     )
 
                 if response.isError():
@@ -95,13 +95,73 @@ class Modbus1EcoDesignClient:
         """Write one holding register."""
         async with self._lock:
             client = await self._async_get_client()
-            response = await client.write_register(
+            response = await self._async_write_register(
+                client=client,
+                address=address,
+                value=value,
+            )
+            if response.isError():
+                raise ModbusWriteError(str(response))
+
+    async def _async_read_input_registers(
+        self,
+        client: AsyncModbusTcpClient,
+        address: int,
+        count: int,
+    ):
+        """Read input registers across pymodbus API variants."""
+        try:
+            return await client.read_input_registers(
+                address=address,
+                count=count,
+                device_id=self._slave,
+            )
+        except TypeError:
+            return await client.read_input_registers(
+                address=address,
+                count=count,
+                slave=self._slave,
+            )
+
+    async def _async_read_holding_registers(
+        self,
+        client: AsyncModbusTcpClient,
+        address: int,
+        count: int,
+    ):
+        """Read holding registers across pymodbus API variants."""
+        try:
+            return await client.read_holding_registers(
+                address=address,
+                count=count,
+                device_id=self._slave,
+            )
+        except TypeError:
+            return await client.read_holding_registers(
+                address=address,
+                count=count,
+                slave=self._slave,
+            )
+
+    async def _async_write_register(
+        self,
+        client: AsyncModbusTcpClient,
+        address: int,
+        value: int,
+    ):
+        """Write a register across pymodbus API variants."""
+        try:
+            return await client.write_register(
+                address=address,
+                value=value,
+                device_id=self._slave,
+            )
+        except TypeError:
+            return await client.write_register(
                 address=address,
                 value=value,
                 slave=self._slave,
             )
-            if response.isError():
-                raise ModbusWriteError(str(response))
 
     async def _async_get_client(self) -> AsyncModbusTcpClient:
         """Return a connected AsyncModbusTcpClient."""
@@ -134,4 +194,3 @@ async def async_validate_connection(host: str, port: int, slave: int, timeout: i
             raise ModbusReadError("Validation register was not returned by endpoint")
     finally:
         await client.async_close()
-
