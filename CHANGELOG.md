@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-03-14
+
+### Fixed
+- Fixed manifest key ordering to satisfy hassfest validation.
+- Removed unused `async_setup` to avoid config schema warning for entry-only setup.
+
 ## [0.1.1] - 2026-03-14
 
 ### Changed
@@ -24,4 +30,5 @@ The format is based on Keep a Changelog, and this project follows
 - Dependabot and security policy.
 
 [0.1.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.1
+[0.1.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.2
 [0.1.0]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.0
