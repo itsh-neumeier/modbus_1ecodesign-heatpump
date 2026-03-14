@@ -1,0 +1,40 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Connect to 1EcoDesign heat pump",
+        "description": "Enter Modbus TCP settings for your unit.",
+        "data": {
+          "name": "Name",
+          "host": "Host",
+          "port": "Port",
+          "slave": "Modbus slave ID",
+          "scan_interval": "Polling interval (seconds)",
+          "timeout": "Timeout (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to Modbus endpoint",
+      "invalid_response": "Device responded with invalid Modbus data",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This endpoint is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Connection tuning",
+        "description": "Adjust polling and timeout.",
+        "data": {
+          "scan_interval": "Polling interval (seconds)",
+          "timeout": "Timeout (seconds)"
+        }
+      }
+    }
+  }
+}
+

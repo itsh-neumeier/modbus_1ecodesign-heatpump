@@ -1,0 +1,40 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Mit 1EcoDesign Waermepumpe verbinden",
+        "description": "Bitte die Modbus-TCP Parameter eingeben.",
+        "data": {
+          "name": "Name",
+          "host": "Host",
+          "port": "Port",
+          "slave": "Modbus Slave-ID",
+          "scan_interval": "Polling Intervall (Sekunden)",
+          "timeout": "Timeout (Sekunden)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zum Modbus-Endpunkt nicht moeglich",
+      "invalid_response": "Geraet lieferte ungueltige Modbus-Daten",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Dieser Endpunkt ist bereits konfiguriert"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Verbindung anpassen",
+        "description": "Polling und Timeout konfigurieren.",
+        "data": {
+          "scan_interval": "Polling Intervall (Sekunden)",
+          "timeout": "Timeout (Sekunden)"
+        }
+      }
+    }
+  }
+}
+

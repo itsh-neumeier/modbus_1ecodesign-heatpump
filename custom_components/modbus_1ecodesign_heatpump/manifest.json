@@ -1,0 +1,13 @@
+{
+  "domain": "modbus_1ecodesign_heatpump",
+  "name": "Modbus 1EcoDesign Heatpump",
+  "codeowners": ["@timo"],
+  "config_flow": true,
+  "documentation": "https://github.com/your-github-user/modbus_1ecodesign-heatpump",
+  "issue_tracker": "https://github.com/your-github-user/modbus_1ecodesign-heatpump/issues",
+  "iot_class": "local_polling",
+  "loggers": ["pymodbus"],
+  "requirements": ["pymodbus==3.12.1"],
+  "version": "0.1.0"
+}
+

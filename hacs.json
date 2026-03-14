@@ -1,0 +1,8 @@
+{
+  "name": "Modbus 1EcoDesign Heatpump",
+  "render_readme": true,
+  "content_in_root": false,
+  "domains": ["modbus_1ecodesign_heatpump"],
+  "homeassistant": "2024.8.0"
+}
+
