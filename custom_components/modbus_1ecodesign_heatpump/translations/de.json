@@ -3,7 +3,7 @@
     "flow_title": "{name}",
     "step": {
       "user": {
-        "title": "Mit 1EcoDesign Waermepumpe verbinden",
+        "title": "1EcoDesign Wärmepumpen",
         "description": "Bitte die Modbus-TCP Parameter eingeben.",
         "data": {
           "name": "Name",

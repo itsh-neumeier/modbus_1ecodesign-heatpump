@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-03-14
+
+### Changed
+- Updated multilingual config-flow titles:
+  - DE: `1EcoDesign Wärmepumpen`
+  - EN: `1EcoDesign Heatpumps`
+- Added integration branding images from 1EcoDesign favicon:
+  - `custom_components/modbus_1ecodesign_heatpump/icon.png`
+  - `custom_components/modbus_1ecodesign_heatpump/logo.png`
+
 ## [0.1.5] - 2026-03-14
 
 ### Added
@@ -53,6 +63,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.6]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.6
 [0.1.5]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.5
 [0.1.4]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.4
 [0.1.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.3

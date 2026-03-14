@@ -3,7 +3,7 @@
     "flow_title": "{name}",
     "step": {
       "user": {
-        "title": "Connect to 1EcoDesign heat pump",
+        "title": "1EcoDesign Heatpumps",
         "description": "Enter Modbus TCP settings for your unit.",
         "data": {
           "name": "Name",
