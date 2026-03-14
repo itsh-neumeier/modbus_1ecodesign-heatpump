@@ -76,6 +76,10 @@ The integration performs a real Modbus read check before saving config.
 - `Relay Solenoid Valve` (12)
 - `Relay Condenser` (13)
 - `Relay Fan` (14)
+- `Status bit sensors` from Input Register 16
+  (`Off`, `Ready`, `Running`, `Legionella`, `Defrost`, `Boost`, `PV`, ...)
+- `Unit alarm bit sensors` from Input Register 18
+  (`Tank sensor`, `Evaporator sensor`, `Pressostat`, `Check anode`, ...)
 
 ### Number Controls
 

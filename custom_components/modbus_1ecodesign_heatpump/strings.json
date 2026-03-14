@@ -36,5 +36,33 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "status_bit_off": { "name": "Status: Off" },
+      "status_bit_ready": { "name": "Status: Ready" },
+      "status_bit_running": { "name": "Status: Running" },
+      "status_bit_legionella": { "name": "Status: Legionella mode" },
+      "status_bit_legionella_end": { "name": "Status: Legionella mode end" },
+      "status_bit_defrost": { "name": "Status: Defrost" },
+      "status_bit_defrost_end": { "name": "Status: Defrost end" },
+      "status_bit_fault": { "name": "Status: Fault" },
+      "status_bit_boost": { "name": "Status: Boost" },
+      "status_bit_hp_locked": { "name": "Status: Heat pump locked" },
+      "status_bit_holiday": { "name": "Status: Holiday" },
+      "status_bit_sg_enabled": { "name": "Status: SG enabled" },
+      "status_bit_pv_hp": { "name": "Status: PV HP" },
+      "status_bit_pv_el": { "name": "Status: PV EL" },
+      "status_bit_pv_hp_el": { "name": "Status: PV HP+EL" },
+      "alarm_bit_tank_sensor_short": { "name": "Alarm: Tank sensor short circuit" },
+      "alarm_bit_tank_sensor_open": { "name": "Alarm: Tank sensor open circuit" },
+      "alarm_bit_evaporator_sensor_short": { "name": "Alarm: Evaporator sensor short circuit" },
+      "alarm_bit_evaporator_sensor_open": { "name": "Alarm: Evaporator sensor open circuit" },
+      "alarm_bit_pressostat_first": { "name": "Alarm: First pressostat warning" },
+      "alarm_bit_pressostat_fault": { "name": "Alarm: Pressostat fault" },
+      "alarm_bit_check_anode": { "name": "Alarm: Check anode" },
+      "alarm_bit_legio_temp_not_reached": { "name": "Alarm: Legionella temperature not reached" },
+      "alarm_bit_set_clock": { "name": "Alarm: Set clock" }
+    }
   }
 }

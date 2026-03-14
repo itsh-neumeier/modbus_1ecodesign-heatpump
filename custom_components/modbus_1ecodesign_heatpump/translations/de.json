@@ -36,5 +36,33 @@
         }
       }
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "status_bit_off": { "name": "Status: Aus" },
+      "status_bit_ready": { "name": "Status: Betriebsbereit" },
+      "status_bit_running": { "name": "Status: In Betrieb" },
+      "status_bit_legionella": { "name": "Status: Legionellenmodus" },
+      "status_bit_legionella_end": { "name": "Status: Legionellenmodus Ende" },
+      "status_bit_defrost": { "name": "Status: Abtau" },
+      "status_bit_defrost_end": { "name": "Status: Abtau Ende" },
+      "status_bit_fault": { "name": "Status: Stoerung" },
+      "status_bit_boost": { "name": "Status: Boost" },
+      "status_bit_hp_locked": { "name": "Status: WP gesperrt" },
+      "status_bit_holiday": { "name": "Status: Ferien" },
+      "status_bit_sg_enabled": { "name": "Status: SG aktiviert" },
+      "status_bit_pv_hp": { "name": "Status: PV-WP" },
+      "status_bit_pv_el": { "name": "Status: PV-EL" },
+      "status_bit_pv_hp_el": { "name": "Status: PV-WP+EL" },
+      "alarm_bit_tank_sensor_short": { "name": "Alarm: Speicherfuehler Kurzschluss" },
+      "alarm_bit_tank_sensor_open": { "name": "Alarm: Speicherfuehler Unterbrechung" },
+      "alarm_bit_evaporator_sensor_short": { "name": "Alarm: Verdampferfuehler Kurzschluss" },
+      "alarm_bit_evaporator_sensor_open": { "name": "Alarm: Verdampferfuehler Unterbrechung" },
+      "alarm_bit_pressostat_first": { "name": "Alarm: Erste Pressostat Meldung" },
+      "alarm_bit_pressostat_fault": { "name": "Alarm: Pressostat Stoerung" },
+      "alarm_bit_check_anode": { "name": "Alarm: Anode kontrollieren" },
+      "alarm_bit_legio_temp_not_reached": { "name": "Alarm: Legio Temperatur nicht erreicht" },
+      "alarm_bit_set_clock": { "name": "Alarm: Uhrzeit einstellen" }
+    }
   }
 }
