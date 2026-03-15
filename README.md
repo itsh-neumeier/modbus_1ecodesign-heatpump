@@ -140,6 +140,17 @@ State contains decoded text flags; `active_flags` and `raw_value` are exposed as
 - `Boost Enabled` (22)
 - `Anode Enabled` (27)
 
+### Time Controls
+
+- `Timer Start` (Holding Registers 8+9 as HH:MM)
+- `Timer Stop` (Holding Registers 10+11 as HH:MM)
+
+### Gateway Monitoring
+
+- A dedicated `Modbus TCP Gateway` device is created in the device registry.
+- Heatpump device is linked as `connected via` this gateway device.
+- `Gateway Online` binary sensor reports TCP reachability of the converter endpoint.
+
 ## Performance Notes
 
 - Register reads are grouped into contiguous blocks.

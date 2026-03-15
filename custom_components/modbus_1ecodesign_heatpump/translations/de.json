@@ -42,6 +42,7 @@
   },
   "entity": {
     "binary_sensor": {
+      "gateway_online": { "name": "Gateway Online" },
       "di1_pressostat": { "name": "Kontakt 1: Pressostat" },
       "di2_pv_input": { "name": "Kontakt 2: SG-Ready" },
       "relay_compressor": { "name": "Relais 1: Kompressor" },
@@ -182,6 +183,10 @@
       "timer_enabled": { "name": "Zeitplanung: Zustand" },
       "boost_enabled": { "name": "Boost" },
       "anode_enabled": { "name": "Anode" }
+    },
+    "time": {
+      "timer_start": { "name": "Zeitplanung: Start" },
+      "timer_stop": { "name": "Zeitplanung: Ende" }
     }
   }
 }

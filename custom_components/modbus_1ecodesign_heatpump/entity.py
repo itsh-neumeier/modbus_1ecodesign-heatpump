@@ -32,6 +32,7 @@ class Modbus1EcoDesignEntity(CoordinatorEntity[Modbus1EcoDesignUpdateCoordinator
         profile = self.coordinator.profile
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry.entry_id)},
+            via_device=gateway_device_identifier(self._entry),
             name=self._entry.data.get(CONF_NAME, DEFAULT_NAME),
             manufacturer=get_profile_manufacturer(profile),
             model=get_profile_model(profile),
@@ -45,3 +46,19 @@ class Modbus1EcoDesignEntity(CoordinatorEntity[Modbus1EcoDesignUpdateCoordinator
         if value is None:
             return None
         return int(value)
+
+
+def gateway_device_identifier(entry: ConfigEntry) -> tuple[str, str]:
+    """Return stable gateway device identifier tuple."""
+    return (DOMAIN, f"{entry.entry_id}_gateway")
+
+
+def gateway_device_name(entry: ConfigEntry) -> str:
+    """Build gateway device display name."""
+    base_name = str(entry.data.get(CONF_NAME, DEFAULT_NAME))
+    return f"{base_name} Modbus TCP Gateway"
+
+
+def gateway_configuration_url(entry: ConfigEntry) -> str:
+    """Gateway HTTP page for visit button."""
+    return f"http://{entry.data[CONF_HOST]}:80"

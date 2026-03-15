@@ -4,4 +4,11 @@ name:
   de: "ED180P"
 model: "ED180P"
 manufacturer: "1EcoDesign GmbH"
-
+timer:
+  supported: true
+  enable_register: 7
+  start_hour_register: 8
+  start_minute_register: 9
+  stop_hour_register: 10
+  stop_minute_register: 11
+  allow_cross_midnight: true

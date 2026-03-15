@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT
 from homeassistant.core import HomeAssistant
@@ -15,6 +17,8 @@ from .const import (
     PLATFORMS,
 )
 from .device_profile import get_device_profile
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -70,3 +74,30 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def _async_update_listener(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload entry when options change."""
     await hass.config_entries.async_reload(entry.entry_id)
+
+
+async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
+    """Migrate old config entry versions."""
+    if config_entry.version > 3:
+        _LOGGER.error(
+            "Cannot migrate entry %s from future version %s",
+            config_entry.entry_id,
+            config_entry.version,
+        )
+        return False
+
+    if config_entry.version < 3:
+        data = dict(config_entry.data)
+        options = dict(config_entry.options)
+        profile = str(data.get(CONF_DEVICE_PROFILE, DEFAULT_DEVICE_PROFILE))
+        data.setdefault(CONF_DEVICE_PROFILE, profile)
+        options.setdefault(CONF_DEVICE_PROFILE, profile)
+        hass.config_entries.async_update_entry(
+            config_entry,
+            data=data,
+            options=options,
+            version=3,
+        )
+        _LOGGER.info("Migrated %s to version 3", config_entry.entry_id)
+
+    return True

@@ -6,17 +6,26 @@ from dataclasses import dataclass, replace
 from typing import Any
 
 from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+from .coordinator import Modbus1EcoDesignUpdateCoordinator
 from .device_profile import get_entity_override, is_entity_excluded
-from .entity import Modbus1EcoDesignEntity
+from .entity import (
+    Modbus1EcoDesignEntity,
+    gateway_configuration_url,
+    gateway_device_identifier,
+    gateway_device_name,
+)
 from .modbus import REGISTER_TYPE_INPUT
 
 
@@ -94,10 +103,12 @@ async def async_setup_entry(
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
     profile = hass.data[DOMAIN][entry.entry_id]["profile"]
     binary_sensor_types = _build_binary_sensor_types(profile)
-    async_add_entities(
+    entities: list[BinarySensorEntity] = [
         Modbus1EcoDesignBinarySensor(coordinator=coordinator, entry=entry, description=description)
         for description in binary_sensor_types
-    )
+    ]
+    entities.append(Modbus1EcoDesignGatewayOnlineBinarySensor(coordinator=coordinator, entry=entry))
+    async_add_entities(entities)
 
 
 class Modbus1EcoDesignBinarySensor(Modbus1EcoDesignEntity, BinarySensorEntity):
@@ -123,6 +134,42 @@ class Modbus1EcoDesignBinarySensor(Modbus1EcoDesignEntity, BinarySensorEntity):
         if raw is None:
             return None
         return bool(raw)
+
+
+class Modbus1EcoDesignGatewayOnlineBinarySensor(
+    CoordinatorEntity[Modbus1EcoDesignUpdateCoordinator],
+    BinarySensorEntity,
+):
+    """Gateway connectivity sensor on dedicated gateway device."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "gateway_online"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+
+    def __init__(self, coordinator: Modbus1EcoDesignUpdateCoordinator, entry: ConfigEntry) -> None:
+        super().__init__(coordinator)
+        self._entry = entry
+        self._attr_unique_id = f"{entry.entry_id}_gateway_online"
+
+    @property
+    def available(self) -> bool:
+        """Gateway status should stay visible even if Modbus update failed."""
+        return True
+
+    @property
+    def is_on(self) -> bool:
+        return bool(self.coordinator.gateway_online)
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        return DeviceInfo(
+            identifiers={gateway_device_identifier(self._entry)},
+            name=gateway_device_name(self._entry),
+            manufacturer="Generic",
+            model="Modbus-over-TCP Gateway",
+            configuration_url=gateway_configuration_url(self._entry),
+        )
 
 
 def _build_binary_sensor_types(

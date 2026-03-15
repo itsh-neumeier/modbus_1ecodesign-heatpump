@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 from typing import Any
@@ -47,6 +48,7 @@ class Modbus1EcoDesignUpdateCoordinator(
         self._client = client
         self.profile = profile
         self._read_blocks = _read_blocks_from_profile(profile)
+        self.gateway_online = False
         scan_interval = int(
             entry.options.get(
                 CONF_SCAN_INTERVAL,
@@ -61,9 +63,15 @@ class Modbus1EcoDesignUpdateCoordinator(
         )
 
     async def _async_update_data(self) -> dict[str, dict[int, int]]:
+        self.gateway_online = await self._async_probe_gateway_tcp()
+        if not self.gateway_online:
+            raise UpdateFailed(
+                f"Gateway {self._client.host}:{self._client.port} is not reachable over TCP"
+            )
         try:
             return await self._client.async_read_register_blocks(self._read_blocks)
         except (ModbusConnectionError, ModbusReadError) as err:
+            self.gateway_online = False
             raise UpdateFailed(str(err)) from err
 
     async def async_write_holding_register(self, address: int, value: int) -> None:
@@ -72,6 +80,31 @@ class Modbus1EcoDesignUpdateCoordinator(
         except ModbusWriteError as err:
             raise UpdateFailed(str(err)) from err
         await self.async_request_refresh()
+
+    async def async_write_holding_registers(self, values: dict[int, int]) -> None:
+        """Write multiple holding registers and refresh once."""
+        try:
+            await self._client.async_write_holding_registers(values=values)
+        except ModbusWriteError as err:
+            raise UpdateFailed(str(err)) from err
+        await self.async_request_refresh()
+
+    async def _async_probe_gateway_tcp(self) -> bool:
+        """Check whether Modbus TCP gateway endpoint is reachable."""
+        writer = None
+        timeout = max(1, int(self._client.timeout))
+        try:
+            _, writer = await asyncio.wait_for(
+                asyncio.open_connection(self._client.host, self._client.port),
+                timeout=timeout,
+            )
+        except (TimeoutError, OSError):
+            return False
+        finally:
+            if writer is not None:
+                writer.close()
+                await writer.wait_closed()
+        return True
 
 
 def _read_blocks_from_profile(profile: dict[str, Any]) -> list[RegisterBlock]:

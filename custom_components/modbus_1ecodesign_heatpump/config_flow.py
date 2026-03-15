@@ -30,7 +30,7 @@ _LOGGER = logging.getLogger(__name__)
 class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Modbus 1EcoDesign Heatpump."""
 
-    VERSION = 1
+    VERSION = 3
 
     async def async_step_user(self, user_input: dict[str, object] | None = None) -> FlowResult:
         errors: dict[str, str] = {}

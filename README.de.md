@@ -140,6 +140,17 @@ stehen zusaetzlich als Attribute zur Verfuegung.
 - Boost Enabled (22)
 - Anode Enabled (27)
 
+### Zeitsteuerung
+
+- `Zeitplanung: Start` (Holding-Register 8+9 als HH:MM)
+- `Zeitplanung: Ende` (Holding-Register 10+11 als HH:MM)
+
+### Gateway-Ueberwachung
+
+- Es wird ein eigenes `Modbus TCP Gateway`-Geraet in der Device Registry angelegt.
+- Das Waermepumpen-Geraet ist als `connected via` mit diesem Gateway verknuepft.
+- Der Binary Sensor `Gateway Online` meldet die TCP-Erreichbarkeit des Converters.
+
 ## Performance
 
 - Register werden blockweise gelesen.

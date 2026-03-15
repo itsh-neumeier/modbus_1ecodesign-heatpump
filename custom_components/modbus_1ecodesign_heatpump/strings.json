@@ -42,6 +42,7 @@
   },
   "entity": {
     "binary_sensor": {
+      "gateway_online": { "name": "Gateway Online" },
       "di1_pressostat": { "name": "DI1 Pressostat" },
       "di2_pv_input": { "name": "DI2 PV Input" },
       "relay_compressor": { "name": "Relay Compressor" },
@@ -182,6 +183,10 @@
       "timer_enabled": { "name": "Timer Enabled" },
       "boost_enabled": { "name": "Boost Enabled" },
       "anode_enabled": { "name": "Anode Enabled" }
+    },
+    "time": {
+      "timer_start": { "name": "Timer Start" },
+      "timer_stop": { "name": "Timer Stop" }
     }
   }
 }

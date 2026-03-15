@@ -47,6 +47,7 @@ def get_device_profiles() -> dict[str, dict[str, Any]]:
         parsed.setdefault("model", DEFAULT_MODEL)
         parsed.setdefault("entity_overrides", {})
         parsed.setdefault("entity_excludes", [])
+        parsed.setdefault("timer", {})
         parsed.setdefault("selectable", True)
         profiles[profile_id] = parsed
 
@@ -58,6 +59,7 @@ def get_device_profiles() -> dict[str, dict[str, Any]]:
             "model": DEFAULT_MODEL,
             "entity_overrides": {},
             "entity_excludes": [],
+            "timer": {},
             "selectable": True,
         }
 
@@ -130,3 +132,30 @@ def get_profile_model(profile: dict[str, Any]) -> str:
 def get_profile_manufacturer(profile: dict[str, Any]) -> str:
     """Return profile manufacturer."""
     return str(profile.get("manufacturer", MANUFACTURER))
+
+
+def get_timer_config(profile: dict[str, Any]) -> dict[str, Any]:
+    """Return normalized timer settings for a profile."""
+    timer = profile.get("timer", {})
+    if not isinstance(timer, dict):
+        timer = {}
+    normalized = {
+        "supported": bool(timer.get("supported", False)),
+        "enable_register": _as_optional_int(timer.get("enable_register")),
+        "start_hour_register": _as_optional_int(timer.get("start_hour_register")),
+        "start_minute_register": _as_optional_int(timer.get("start_minute_register")),
+        "stop_hour_register": _as_optional_int(timer.get("stop_hour_register")),
+        "stop_minute_register": _as_optional_int(timer.get("stop_minute_register")),
+        "allow_cross_midnight": bool(timer.get("allow_cross_midnight", True)),
+    }
+    return normalized
+
+
+def _as_optional_int(value: Any) -> int | None:
+    """Convert value to int or return None for invalid values."""
+    try:
+        if value is None:
+            return None
+        return int(value)
+    except (TypeError, ValueError):
+        return None

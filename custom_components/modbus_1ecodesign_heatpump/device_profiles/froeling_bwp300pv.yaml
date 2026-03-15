@@ -4,4 +4,11 @@ name:
   de: "Froeling BWP300PV (OEM)"
 model: "Froeling BWP300PV (OEM by 1EcoDesign)"
 manufacturer: "1EcoDesign GmbH"
-
+timer:
+  supported: true
+  enable_register: 7
+  start_hour_register: 8
+  start_minute_register: 9
+  stop_hour_register: 10
+  stop_minute_register: 11
+  allow_cross_midnight: true

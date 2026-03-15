@@ -46,6 +46,21 @@ class Modbus1EcoDesignClient:
         self._client: AsyncModbusTcpClient | None = None
         self._lock = asyncio.Lock()
 
+    @property
+    def host(self) -> str:
+        """Configured Modbus host."""
+        return self._host
+
+    @property
+    def port(self) -> int:
+        """Configured Modbus port."""
+        return self._port
+
+    @property
+    def timeout(self) -> int:
+        """Configured timeout in seconds."""
+        return self._timeout
+
     async def async_close(self) -> None:
         """Close client connection."""
         async with self._lock:
@@ -102,6 +117,19 @@ class Modbus1EcoDesignClient:
             )
             if response.isError():
                 raise ModbusWriteError(str(response))
+
+    async def async_write_holding_registers(self, values: dict[int, int]) -> None:
+        """Write multiple holding registers in one client session."""
+        async with self._lock:
+            client = await self._async_get_client()
+            for address, value in values.items():
+                response = await self._async_write_register(
+                    client=client,
+                    address=address,
+                    value=value,
+                )
+                if response.isError():
+                    raise ModbusWriteError(str(response))
 
     async def _async_read_input_registers(
         self,
