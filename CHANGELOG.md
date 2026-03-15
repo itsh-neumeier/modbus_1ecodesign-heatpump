@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-03-15
+
+### Changed
+- Updated Victron PV surplus automation examples in `README.md` and
+  `README.de.md` to use Fröling BWP300PV targets:
+  - entity: `select.froling_bwp300pv_betriebsmodus_pv_sg`
+  - device_id: `39ab34012f47b248e4714f7e2f381909`
+
 ## [0.2.1] - 2026-03-15
 
 ### Changed
@@ -217,6 +225,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.2.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.2
 [0.2.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.1
 [0.2.0]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.0
 [0.1.16]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.16

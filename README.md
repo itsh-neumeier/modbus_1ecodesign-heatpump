@@ -222,25 +222,27 @@ actions:
           - condition: not
             conditions:
               - condition: state
-                entity_id: select.192168140217_pv_modus
+                entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
                 state: "hp_plus_el"
         sequence:
           - service: select.select_option
             target:
-              entity_id: select.192168140217_pv_modus
+              device_id: 39ab34012f47b248e4714f7e2f381909
+              entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
             data:
               option: "hp_plus_el"
       - conditions:
           - condition: template
             value_template: "{{ trigger.id == 'excess_lost' }}"
           - condition: state
-            entity_id: select.192168140217_pv_modus
+            entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
             state: "hp_plus_el"
             for: "00:30:00"
         sequence:
           - service: select.select_option
             target:
-              entity_id: select.192168140217_pv_modus
+              device_id: 39ab34012f47b248e4714f7e2f381909
+              entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
             data:
               option: "off"
 ```
