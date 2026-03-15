@@ -1,12 +1,14 @@
 {
   "domain": "modbus_1ecodesign_heatpump",
   "name": "1EcoDesign Heatpumps",
-  "codeowners": ["@timo"],
+  "codeowners": ["@itsh-neumeier"],
   "config_flow": true,
   "documentation": "https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump",
+  "integration_type": "hub",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/issues",
   "loggers": ["pymodbus"],
+  "quality_scale": "bronze",
   "requirements": ["pymodbus>=3.5.0,<4.0.0"],
-  "version": "0.1.12"
+  "version": "0.1.13"
 }

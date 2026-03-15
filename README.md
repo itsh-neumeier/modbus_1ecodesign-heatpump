@@ -1,4 +1,11 @@
-# Modbus 1EcoDesign Heatpump
+# 1EcoDesign Heatpumps
+
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![release](https://img.shields.io/github/v/release/itsh-neumeier/modbus_1ecodesign-heatpump)](https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases)
+
+German documentation: [README.de.md](README.de.md)
+`README.de.md` is maintained as an up-to-date translated derivative of this file.
 
 HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 (ED300KWL / VC200 family) via Modbus TCP.
@@ -21,7 +28,6 @@ HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 
 - Home Assistant: `2024.8.0+`
 - Protocol: Modbus TCP
-- Tested endpoint: `192.168.140.217:502` (reachable)
 - Tested slave ID: `3` (responding)
 
 ## Installation (HACS)
@@ -30,10 +36,10 @@ HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 2. Add custom repository:
    `https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump`
    as category `Integration`.
-3. Install **Modbus 1EcoDesign Heatpump**.
+3. Install **1EcoDesign Heatpumps**.
 4. Restart Home Assistant.
 5. Go to Settings -> Devices & Services -> Add Integration.
-6. Select **Modbus 1EcoDesign Heatpump**.
+6. Select **1EcoDesign Heatpumps**.
 
 ## Manual Installation
 
@@ -46,7 +52,7 @@ HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 
 During setup, provide:
 
-- `Host` (example: `192.168.140.217`)
+- `Host` (example: `192.168.73.42`)
 - `Device profile` (model-specific register mapping)
 - `Port` (default: `502`)
 - `Modbus slave ID` (default: `3`)

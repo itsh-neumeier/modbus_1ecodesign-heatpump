@@ -5,6 +5,22 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.13] - 2026-03-15
+
+### Changed
+- Standardized README naming and presentation:
+  - title set to `1EcoDesign Heatpumps`
+  - added HACS/License/Release badges
+  - removed endpoint-specific tested host from docs
+  - replaced setup host example with randomized private LAN example
+- Linked German README from default README and documented that
+  `README.de.md` is maintained as an up-to-date translated derivative.
+- Added branding compatibility assets to improve icon/logo visibility across
+  Home Assistant/HACS variants:
+  - root-level `icon.png`, `logo.png`, `dark_icon.png`, `dark_logo.png`
+  - `brand/icon@2x.png`, `brand/logo@2x.png`, `brand/dark_icon@2x.png`,
+    `brand/dark_logo@2x.png`
+
 ## [0.1.12] - 2026-03-15
 
 ### Added
@@ -24,6 +40,10 @@ The format is based on Keep a Changelog, and this project follows
 - Aligned HACS/Home Assistant display title to integration title:
   - `manifest.json` name -> `1EcoDesign Heatpumps`
   - `hacs.json` name -> `1EcoDesign Heatpumps`
+- Updated manifest metadata quality and ownership:
+  - `codeowners` -> `@itsh-neumeier`
+  - added `integration_type: hub`
+  - added `quality_scale: bronze`
 - Device `manufacturer` / `model` are now profile-driven in device info.
 - Device page `configuration_url` now always targets HTTP port `80`.
 - Entity setup now supports profile-based per-entity overrides/exclusions.
@@ -33,6 +53,9 @@ The format is based on Keep a Changelog, and this project follows
   - `brand/dark_logo.png`
   - `brand/icon.png`
   - `brand/dark_icon.png`
+- Added compatibility branding fallbacks:
+  - root-level `icon.png` / `logo.png` / `dark_icon.png` / `dark_logo.png`
+  - `brand/*@2x.png` variants
 - Added RF-specific mapping override:
   - `T1/T2` input-register assignment adjusted for `ED100RF` manuals.
   - AC fan operation option states added for `ED100RF`.
@@ -138,6 +161,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.13]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.13
 [0.1.12]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.12
 [0.1.11]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.11
 [0.1.10]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.10
