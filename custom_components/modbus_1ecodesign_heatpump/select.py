@@ -80,7 +80,6 @@ BASE_SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
             4: "three_days",
             5: "manual",
         },
-        entity_registry_enabled_default=False,
     ),
     ModbusSelectDescription(
         key="fan_pause",
