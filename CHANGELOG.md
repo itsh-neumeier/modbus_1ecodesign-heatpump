@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.14] - 2026-03-15
+
+### Added
+- Added repository-root `brand/` assets for improved HACS logo discovery:
+  - `brand/icon.png`, `brand/logo.png`, `brand/dark_icon.png`, `brand/dark_logo.png`
+  - `brand/icon@2x.png`, `brand/logo@2x.png`,
+    `brand/dark_icon@2x.png`, `brand/dark_logo@2x.png`
+
+### Verified
+- Full translation parity check passed:
+  - `strings.json` == `translations/en.json` == `translations/de.json`
+  - all `translation_key` values used in code are present in translations
+
 ## [0.1.13] - 2026-03-15
 
 ### Changed
@@ -161,6 +174,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.14]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.14
 [0.1.13]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.13
 [0.1.12]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.12
 [0.1.11]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.11
