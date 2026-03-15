@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-03-15
+
+### Added
+- Added writable number entity `legionella_cycle_days` (Holding Register `33`,
+  range `3..14`) to configure legionella auto-cycle interval.
+
+### Changed
+- Updated EN/DE documentation and translations for the new legionella cycle
+  setting.
+
 ## [0.2.2] - 2026-03-15
 
 ### Changed
@@ -225,6 +235,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.2.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.3
 [0.2.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.2
 [0.2.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.1
 [0.2.0]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.0

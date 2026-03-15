@@ -70,6 +70,7 @@
       "pv_el_setpoint": { "name": "Temperatur: T.PV_EL" },
       "manual_holiday_days": { "name": "Abwesenheit: Manuell" },
       "t_max": { "name": "Temperatur: T max" },
+      "legionella_cycle_days": { "name": "Legionellen-Zyklus Tage" },
       "ec_fan_level1": { "name": "EC LS1" },
       "ec_fan_level2": { "name": "EC LS2" },
       "ec_fan_level3": { "name": "EC LS3" }

@@ -118,6 +118,7 @@ State contains decoded text flags; `active_flags` and `raw_value` are exposed as
 - `PV HP Setpoint` (18)
 - `PV EL Setpoint` (19)
 - `T max` (28)
+- `Legionella Cycle Days` (33)
 - `Manual Holiday Days` (21)
 - `EC Fan Level 1/2/3` (30/31/32)
 

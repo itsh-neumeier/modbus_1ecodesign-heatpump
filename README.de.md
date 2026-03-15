@@ -118,6 +118,7 @@ stehen zusaetzlich als Attribute zur Verfuegung.
 - PV HP Setpoint (18)
 - PV EL Setpoint (19)
 - T max (28)
+- Legionellen-Zyklus Tage (33)
 - Manual Holiday Days (21)
 - EC Fan Level 1/2/3 (30/31/32)
 

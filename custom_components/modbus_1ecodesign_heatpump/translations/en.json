@@ -70,6 +70,7 @@
       "pv_el_setpoint": { "name": "PV EL Setpoint" },
       "manual_holiday_days": { "name": "Manual Holiday Days" },
       "t_max": { "name": "T max" },
+      "legionella_cycle_days": { "name": "Legionella Cycle Days" },
       "ec_fan_level1": { "name": "EC Fan Level 1" },
       "ec_fan_level2": { "name": "EC Fan Level 2" },
       "ec_fan_level3": { "name": "EC Fan Level 3" }

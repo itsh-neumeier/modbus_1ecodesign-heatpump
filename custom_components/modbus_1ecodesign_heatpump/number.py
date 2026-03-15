@@ -97,6 +97,16 @@ BASE_NUMBER_TYPES: tuple[ModbusNumberDescription, ...] = (
         entity_category=EntityCategory.CONFIG,
     ),
     ModbusNumberDescription(
+        key="legionella_cycle_days",
+        translation_key="legionella_cycle_days",
+        address=33,
+        native_min_value=3,
+        native_max_value=14,
+        native_step=1,
+        icon="mdi:calendar-sync",
+        entity_category=EntityCategory.CONFIG,
+    ),
+    ModbusNumberDescription(
         key="ec_fan_level1",
         translation_key="ec_fan_level1",
         address=30,
