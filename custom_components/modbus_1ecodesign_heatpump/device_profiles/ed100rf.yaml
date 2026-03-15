@@ -1,0 +1,22 @@
+id: ed100rf
+name:
+  en: "ED100RF"
+  de: "ED100RF"
+model: "ED100RF"
+manufacturer: "1EcoDesign GmbH"
+entity_overrides:
+  sensor:
+    t1_evaporator_temperature:
+      address: 8
+      translation_key: "t1_tank_temperature"
+    t2_tank_temperature:
+      address: 7
+      translation_key: "t2_evaporator_temperature"
+  select:
+    fan_operation:
+      option_map:
+        0: "ac_low"
+        1: "ac_high"
+    ventilation_control:
+      entity_registry_enabled_default: false
+

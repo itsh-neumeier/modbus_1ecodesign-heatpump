@@ -11,7 +11,9 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 
 from .const import (
+    CONF_DEVICE_PROFILE,
     CONF_SLAVE,
+    DEFAULT_DEVICE_PROFILE,
     DEFAULT_NAME,
     DEFAULT_PORT,
     DEFAULT_SCAN_INTERVAL,
@@ -20,6 +22,7 @@ from .const import (
     DOMAIN,
     MIN_SCAN_INTERVAL,
 )
+from .device_profile import get_profile_selector_options
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -42,7 +45,7 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "missing_dependency"
                 return self.async_show_form(
                     step_id="user",
-                    data_schema=_user_schema(user_input),
+                    data_schema=_user_schema(user_input, self.hass.config.language),
                     errors=errors,
                 )
 
@@ -74,6 +77,7 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         CONF_HOST: str(user_input[CONF_HOST]),
                         CONF_PORT: int(user_input[CONF_PORT]),
                         CONF_SLAVE: int(user_input[CONF_SLAVE]),
+                        CONF_DEVICE_PROFILE: str(user_input[CONF_DEVICE_PROFILE]),
                         CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
                         CONF_TIMEOUT: int(user_input[CONF_TIMEOUT]),
                     },
@@ -81,7 +85,7 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=_user_schema(user_input),
+            data_schema=_user_schema(user_input, self.hass.config.language),
             errors=errors,
         )
 
@@ -103,6 +107,7 @@ class Modbus1EcoDesignOptionsFlow(config_entries.OptionsFlow):
             return self.async_create_entry(
                 title="",
                 data={
+                    CONF_DEVICE_PROFILE: str(user_input[CONF_DEVICE_PROFILE]),
                     CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
                     CONF_TIMEOUT: int(user_input[CONF_TIMEOUT]),
                 },
@@ -114,6 +119,12 @@ class Modbus1EcoDesignOptionsFlow(config_entries.OptionsFlow):
                 self._config_entry.data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
             )
         )
+        current_profile = str(
+            self._config_entry.options.get(
+                CONF_DEVICE_PROFILE,
+                self._config_entry.data.get(CONF_DEVICE_PROFILE, DEFAULT_DEVICE_PROFILE),
+            )
+        )
         current_timeout = int(
             self._config_entry.options.get(
                 CONF_TIMEOUT,
@@ -122,6 +133,15 @@ class Modbus1EcoDesignOptionsFlow(config_entries.OptionsFlow):
         )
         schema = vol.Schema(
             {
+                vol.Required(
+                    CONF_DEVICE_PROFILE,
+                    default=current_profile,
+                ): selector.SelectSelector(
+                    selector.SelectSelectorConfig(
+                        options=get_profile_selector_options(self.hass.config.language),
+                        mode=selector.SelectSelectorMode.DROPDOWN,
+                    )
+                ),
                 vol.Required(CONF_SCAN_INTERVAL, default=current_scan): selector.NumberSelector(
                     selector.NumberSelectorConfig(
                         min=MIN_SCAN_INTERVAL,
@@ -143,12 +163,21 @@ class Modbus1EcoDesignOptionsFlow(config_entries.OptionsFlow):
         return self.async_show_form(step_id="init", data_schema=schema)
 
 
-def _user_schema(user_input: dict[str, object] | None) -> vol.Schema:
+def _user_schema(user_input: dict[str, object] | None, language: str | None) -> vol.Schema:
     user_input = user_input or {}
     return vol.Schema(
         {
             vol.Required(CONF_NAME, default=user_input.get(CONF_NAME, DEFAULT_NAME)): str,
             vol.Required(CONF_HOST, default=user_input.get(CONF_HOST, "")): str,
+            vol.Required(
+                CONF_DEVICE_PROFILE,
+                default=user_input.get(CONF_DEVICE_PROFILE, DEFAULT_DEVICE_PROFILE),
+            ): selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=get_profile_selector_options(language),
+                    mode=selector.SelectSelectorMode.DROPDOWN,
+                )
+            ),
             vol.Required(
                 CONF_PORT,
                 default=user_input.get(CONF_PORT, DEFAULT_PORT),

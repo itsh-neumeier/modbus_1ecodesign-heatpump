@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_SCAN_INTERVAL
@@ -40,9 +41,12 @@ class Modbus1EcoDesignUpdateCoordinator(
         hass: HomeAssistant,
         entry: ConfigEntry,
         client: Modbus1EcoDesignClient,
+        profile: dict[str, Any],
     ) -> None:
         self._entry = entry
         self._client = client
+        self.profile = profile
+        self._read_blocks = _read_blocks_from_profile(profile)
         scan_interval = int(
             entry.options.get(
                 CONF_SCAN_INTERVAL,
@@ -58,7 +62,7 @@ class Modbus1EcoDesignUpdateCoordinator(
 
     async def _async_update_data(self) -> dict[str, dict[int, int]]:
         try:
-            return await self._client.async_read_register_blocks(DEFAULT_READ_BLOCKS)
+            return await self._client.async_read_register_blocks(self._read_blocks)
         except (ModbusConnectionError, ModbusReadError) as err:
             raise UpdateFailed(str(err)) from err
 
@@ -69,3 +73,27 @@ class Modbus1EcoDesignUpdateCoordinator(
             raise UpdateFailed(str(err)) from err
         await self.async_request_refresh()
 
+
+def _read_blocks_from_profile(profile: dict[str, Any]) -> list[RegisterBlock]:
+    """Use profile read blocks if valid, otherwise fallback to defaults."""
+    configured = profile.get("read_blocks", [])
+    if not isinstance(configured, list):
+        return DEFAULT_READ_BLOCKS
+
+    blocks: list[RegisterBlock] = []
+    for item in configured:
+        if not isinstance(item, dict):
+            continue
+        register_type = str(item.get("register_type", "")).strip().lower()
+        if register_type not in (REGISTER_TYPE_INPUT, REGISTER_TYPE_HOLDING):
+            continue
+        try:
+            start = int(item.get("start"))
+            count = int(item.get("count"))
+        except (TypeError, ValueError):
+            continue
+        if start < 0 or count <= 0:
+            continue
+        blocks.append(RegisterBlock(register_type=register_type, start=start, count=count))
+
+    return blocks or DEFAULT_READ_BLOCKS

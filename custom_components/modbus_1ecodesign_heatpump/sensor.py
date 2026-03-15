@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -17,6 +18,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .device_profile import get_entity_override, is_entity_excluded
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_INPUT
 
@@ -83,7 +85,7 @@ class ModbusSensorDescription(SensorEntityDescription):
     bit_label_map: dict[str, dict[str, str]] | None = None
 
 
-SENSOR_TYPES: tuple[ModbusSensorDescription, ...] = (
+BASE_SENSOR_TYPES: tuple[ModbusSensorDescription, ...] = (
     ModbusSensorDescription(
         key="t1_evaporator_temperature",
         translation_key="t1_evaporator_temperature",
@@ -172,9 +174,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    profile = hass.data[DOMAIN][entry.entry_id]["profile"]
+    sensor_types = _build_sensor_types(profile)
     async_add_entities(
         Modbus1EcoDesignSensor(coordinator=coordinator, entry=entry, description=description)
-        for description in SENSOR_TYPES
+        for description in sensor_types
     )
 
 
@@ -249,3 +253,54 @@ class Modbus1EcoDesignSensor(Modbus1EcoDesignEntity, SensorEntity):
     def _language_code(self) -> str:
         language = (self.hass.config.language or "en").lower()
         return "de" if language.startswith("de") else "en"
+
+
+def _build_sensor_types(profile: dict[str, Any]) -> tuple[ModbusSensorDescription, ...]:
+    result: list[ModbusSensorDescription] = []
+    for description in BASE_SENSOR_TYPES:
+        if is_entity_excluded(profile, "sensor", description.key):
+            continue
+        override = get_entity_override(profile, "sensor", description.key)
+        result.append(_apply_sensor_override(description, override))
+    return tuple(result)
+
+
+def _apply_sensor_override(
+    description: ModbusSensorDescription,
+    override: dict[str, Any],
+) -> ModbusSensorDescription:
+    if not override:
+        return description
+    allowed = {
+        "translation_key",
+        "icon",
+        "address",
+        "register_type",
+        "scale",
+        "offset",
+        "bit_flags",
+        "bit_label_map",
+        "entity_registry_enabled_default",
+    }
+    update_data: dict[str, Any] = {key: value for key, value in override.items() if key in allowed}
+    if "bit_flags" in update_data and isinstance(update_data["bit_flags"], dict):
+        update_data["bit_flags"] = {
+            int(mask): str(flag_key) for mask, flag_key in update_data["bit_flags"].items()
+        }
+    if "scale" in update_data:
+        update_data["scale"] = float(update_data["scale"])
+    if "offset" in update_data:
+        update_data["offset"] = float(update_data["offset"])
+    if "address" in update_data:
+        update_data["address"] = int(update_data["address"])
+    if "register_type" in update_data:
+        update_data["register_type"] = str(update_data["register_type"]).strip().lower()
+    if "translation_key" in update_data:
+        update_data["translation_key"] = str(update_data["translation_key"])
+    if "icon" in update_data:
+        update_data["icon"] = str(update_data["icon"])
+    if "entity_registry_enabled_default" in update_data:
+        update_data["entity_registry_enabled_default"] = bool(
+            update_data["entity_registry_enabled_default"]
+        )
+    return replace(description, **update_data)

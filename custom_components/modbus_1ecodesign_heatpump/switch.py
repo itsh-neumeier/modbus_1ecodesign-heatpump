@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -11,6 +12,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .device_profile import get_entity_override, is_entity_excluded
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_HOLDING
 
@@ -25,7 +27,7 @@ class ModbusSwitchDescription(SwitchEntityDescription):
     register_type: str = REGISTER_TYPE_HOLDING
 
 
-SWITCH_TYPES: tuple[ModbusSwitchDescription, ...] = (
+BASE_SWITCH_TYPES: tuple[ModbusSwitchDescription, ...] = (
     ModbusSwitchDescription(
         key="timer_enabled",
         translation_key="timer_enabled",
@@ -57,9 +59,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    profile = hass.data[DOMAIN][entry.entry_id]["profile"]
+    switch_types = _build_switch_types(profile)
     async_add_entities(
         Modbus1EcoDesignSwitch(coordinator=coordinator, entry=entry, description=description)
-        for description in SWITCH_TYPES
+        for description in switch_types
     )
 
 
@@ -98,3 +102,48 @@ class Modbus1EcoDesignSwitch(Modbus1EcoDesignEntity, SwitchEntity):
             address=self.entity_description.address,
             value=self.entity_description.off_value,
         )
+
+
+def _build_switch_types(profile: dict[str, Any]) -> tuple[ModbusSwitchDescription, ...]:
+    result: list[ModbusSwitchDescription] = []
+    for description in BASE_SWITCH_TYPES:
+        if is_entity_excluded(profile, "switch", description.key):
+            continue
+        override = get_entity_override(profile, "switch", description.key)
+        result.append(_apply_switch_override(description, override))
+    return tuple(result)
+
+
+def _apply_switch_override(
+    description: ModbusSwitchDescription,
+    override: dict[str, Any],
+) -> ModbusSwitchDescription:
+    if not override:
+        return description
+    allowed = {
+        "translation_key",
+        "icon",
+        "address",
+        "register_type",
+        "on_value",
+        "off_value",
+        "entity_registry_enabled_default",
+    }
+    update_data: dict[str, Any] = {key: value for key, value in override.items() if key in allowed}
+    if "address" in update_data:
+        update_data["address"] = int(update_data["address"])
+    if "register_type" in update_data:
+        update_data["register_type"] = str(update_data["register_type"]).strip().lower()
+    if "on_value" in update_data:
+        update_data["on_value"] = int(update_data["on_value"])
+    if "off_value" in update_data:
+        update_data["off_value"] = int(update_data["off_value"])
+    if "translation_key" in update_data:
+        update_data["translation_key"] = str(update_data["translation_key"])
+    if "icon" in update_data:
+        update_data["icon"] = str(update_data["icon"])
+    if "entity_registry_enabled_default" in update_data:
+        update_data["entity_registry_enabled_default"] = bool(
+            update_data["entity_registry_enabled_default"]
+        )
+    return replace(description, **update_data)

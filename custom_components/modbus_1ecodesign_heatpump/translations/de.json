@@ -9,6 +9,7 @@
         "data": {
           "name": "Name",
           "host": "Host",
+          "device_profile": "Geraeteprofil",
           "port": "Port",
           "slave": "Modbus Slave-ID",
           "scan_interval": "Polling Intervall (Sekunden)",
@@ -32,6 +33,7 @@
         "title": "Verbindung anpassen",
         "description": "Polling und Timeout konfigurieren.",
         "data": {
+          "device_profile": "Geraeteprofil",
           "scan_interval": "Polling Intervall (Sekunden)",
           "timeout": "Timeout (Sekunden)"
         }
@@ -51,7 +53,9 @@
     },
     "sensor": {
       "t1_evaporator_temperature": { "name": "Temperatur: T1 (Verdampfer)" },
+      "t1_tank_temperature": { "name": "Temperatur: T1 (Speicher)" },
       "t2_tank_temperature": { "name": "Temperatur: T2 (Speicher)" },
+      "t2_evaporator_temperature": { "name": "Temperatur: T2 (Verdampfer)" },
       "remaining_holiday_days": { "name": "Abwesenheit: Verbleibend" },
       "status_bits": { "name": "Status" },
       "unit_alarm_bits": { "name": "Unit Alarm" },
@@ -93,6 +97,8 @@
         "name": "WP_LS",
         "state": {
           "off": "Aus",
+          "ac_low": "AC Niedrig",
+          "ac_high": "AC Hoch",
           "ec_low": "EC Niedrig",
           "ec_mid": "EC Mittel",
           "ec_high": "EC Hoch"

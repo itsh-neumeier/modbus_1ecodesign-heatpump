@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -12,6 +13,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .device_profile import get_entity_override, is_entity_excluded
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_HOLDING
 
@@ -26,7 +28,7 @@ class ModbusNumberDescription(NumberEntityDescription):
     offset: float = 0.0
 
 
-NUMBER_TYPES: tuple[ModbusNumberDescription, ...] = (
+BASE_NUMBER_TYPES: tuple[ModbusNumberDescription, ...] = (
     ModbusNumberDescription(
         key="water_setpoint",
         translation_key="water_setpoint",
@@ -136,9 +138,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    profile = hass.data[DOMAIN][entry.entry_id]["profile"]
+    number_types = _build_number_types(profile)
     async_add_entities(
         Modbus1EcoDesignNumber(coordinator=coordinator, entry=entry, description=description)
-        for description in NUMBER_TYPES
+        for description in number_types
     )
 
 
@@ -172,3 +176,57 @@ class Modbus1EcoDesignNumber(Modbus1EcoDesignEntity, NumberEntity):
             address=self.entity_description.address,
             value=raw,
         )
+
+
+def _build_number_types(profile: dict[str, Any]) -> tuple[ModbusNumberDescription, ...]:
+    result: list[ModbusNumberDescription] = []
+    for description in BASE_NUMBER_TYPES:
+        if is_entity_excluded(profile, "number", description.key):
+            continue
+        override = get_entity_override(profile, "number", description.key)
+        result.append(_apply_number_override(description, override))
+    return tuple(result)
+
+
+def _apply_number_override(
+    description: ModbusNumberDescription,
+    override: dict[str, Any],
+) -> ModbusNumberDescription:
+    if not override:
+        return description
+    allowed = {
+        "translation_key",
+        "icon",
+        "address",
+        "register_type",
+        "scale",
+        "offset",
+        "native_min_value",
+        "native_max_value",
+        "native_step",
+        "entity_registry_enabled_default",
+    }
+    update_data: dict[str, Any] = {key: value for key, value in override.items() if key in allowed}
+    if "address" in update_data:
+        update_data["address"] = int(update_data["address"])
+    if "register_type" in update_data:
+        update_data["register_type"] = str(update_data["register_type"]).strip().lower()
+    if "scale" in update_data:
+        update_data["scale"] = float(update_data["scale"])
+    if "offset" in update_data:
+        update_data["offset"] = float(update_data["offset"])
+    if "native_min_value" in update_data:
+        update_data["native_min_value"] = float(update_data["native_min_value"])
+    if "native_max_value" in update_data:
+        update_data["native_max_value"] = float(update_data["native_max_value"])
+    if "native_step" in update_data:
+        update_data["native_step"] = float(update_data["native_step"])
+    if "translation_key" in update_data:
+        update_data["translation_key"] = str(update_data["translation_key"])
+    if "icon" in update_data:
+        update_data["icon"] = str(update_data["icon"])
+    if "entity_registry_enabled_default" in update_data:
+        update_data["entity_registry_enabled_default"] = bool(
+            update_data["entity_registry_enabled_default"]
+        )
+    return replace(description, **update_data)

@@ -7,12 +7,14 @@ from homeassistant.const import Platform
 DOMAIN = "modbus_1ecodesign_heatpump"
 DEFAULT_NAME = "1EcoDesign Heatpump"
 MANUFACTURER = "1EcoDesign GmbH"
-MODEL = "ED300KWL / VC200"
+DEFAULT_MODEL = "ED300KWL / VC200"
 
 CONF_SLAVE = "slave"
+CONF_DEVICE_PROFILE = "device_profile"
 
 DEFAULT_PORT = 502
 DEFAULT_SLAVE = 3
+DEFAULT_DEVICE_PROFILE = "ed300kwl"
 DEFAULT_SCAN_INTERVAL = 15
 MIN_SCAN_INTERVAL = 5
 DEFAULT_TIMEOUT = 3

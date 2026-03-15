@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
@@ -14,6 +15,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .device_profile import get_entity_override, is_entity_excluded
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_INPUT
 
@@ -26,7 +28,7 @@ class ModbusBinarySensorDescription(BinarySensorEntityDescription):
     register_type: str = REGISTER_TYPE_INPUT
 
 
-BINARY_SENSOR_TYPES: tuple[ModbusBinarySensorDescription, ...] = (
+BASE_BINARY_SENSOR_TYPES: tuple[ModbusBinarySensorDescription, ...] = (
     ModbusBinarySensorDescription(
         key="di1_pressostat",
         translation_key="di1_pressostat",
@@ -90,9 +92,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    profile = hass.data[DOMAIN][entry.entry_id]["profile"]
+    binary_sensor_types = _build_binary_sensor_types(profile)
     async_add_entities(
         Modbus1EcoDesignBinarySensor(coordinator=coordinator, entry=entry, description=description)
-        for description in BINARY_SENSOR_TYPES
+        for description in binary_sensor_types
     )
 
 
@@ -119,3 +123,44 @@ class Modbus1EcoDesignBinarySensor(Modbus1EcoDesignEntity, BinarySensorEntity):
         if raw is None:
             return None
         return bool(raw)
+
+
+def _build_binary_sensor_types(
+    profile: dict[str, Any],
+) -> tuple[ModbusBinarySensorDescription, ...]:
+    result: list[ModbusBinarySensorDescription] = []
+    for description in BASE_BINARY_SENSOR_TYPES:
+        if is_entity_excluded(profile, "binary_sensor", description.key):
+            continue
+        override = get_entity_override(profile, "binary_sensor", description.key)
+        result.append(_apply_binary_override(description, override))
+    return tuple(result)
+
+
+def _apply_binary_override(
+    description: ModbusBinarySensorDescription,
+    override: dict[str, Any],
+) -> ModbusBinarySensorDescription:
+    if not override:
+        return description
+    allowed = {
+        "translation_key",
+        "icon",
+        "address",
+        "register_type",
+        "entity_registry_enabled_default",
+    }
+    update_data: dict[str, Any] = {key: value for key, value in override.items() if key in allowed}
+    if "address" in update_data:
+        update_data["address"] = int(update_data["address"])
+    if "register_type" in update_data:
+        update_data["register_type"] = str(update_data["register_type"]).strip().lower()
+    if "translation_key" in update_data:
+        update_data["translation_key"] = str(update_data["translation_key"])
+    if "icon" in update_data:
+        update_data["icon"] = str(update_data["icon"])
+    if "entity_registry_enabled_default" in update_data:
+        update_data["entity_registry_enabled_default"] = bool(
+            update_data["entity_registry_enabled_default"]
+        )
+    return replace(description, **update_data)

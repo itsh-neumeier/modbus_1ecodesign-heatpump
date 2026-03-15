@@ -5,6 +5,38 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.12] - 2026-03-15
+
+### Added
+- Added external YAML-based device profiles under
+  `custom_components/modbus_1ecodesign_heatpump/device_profiles/`.
+- Added profile selector dropdown to config flow and options flow.
+- Added selectable profiles:
+  - `ED300KWL`
+  - `ED100KWL`
+  - `ED100WL`
+  - `ED180WL`
+  - `ED180P`
+  - `ED100RF`
+  - `Froeling BWP300PV (OEM)`
+
+### Changed
+- Aligned HACS/Home Assistant display title to integration title:
+  - `manifest.json` name -> `1EcoDesign Heatpumps`
+  - `hacs.json` name -> `1EcoDesign Heatpumps`
+- Device `manufacturer` / `model` are now profile-driven in device info.
+- Device page `configuration_url` now always targets HTTP port `80`.
+- Entity setup now supports profile-based per-entity overrides/exclusions.
+- Updated integration branding from official 1EcoDesign logo with transparent
+  light/dark assets:
+  - `brand/logo.png`
+  - `brand/dark_logo.png`
+  - `brand/icon.png`
+  - `brand/dark_icon.png`
+- Added RF-specific mapping override:
+  - `T1/T2` input-register assignment adjusted for `ED100RF` manuals.
+  - AC fan operation option states added for `ED100RF`.
+
 ## [0.1.11] - 2026-03-14
 
 ### Changed
@@ -106,6 +138,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.12]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.12
 [0.1.11]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.11
 [0.1.10]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.10
 [0.1.9]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.9

@@ -47,6 +47,7 @@ HACS-compatible Home Assistant custom integration for 1EcoDesign heat pumps
 During setup, provide:
 
 - `Host` (example: `192.168.140.217`)
+- `Device profile` (model-specific register mapping)
 - `Port` (default: `502`)
 - `Modbus slave ID` (default: `3`)
 - `Polling interval` in seconds
@@ -54,6 +55,29 @@ During setup, provide:
 - Optional integration name
 
 The integration performs a real Modbus read check before saving config.
+
+### Device Profiles
+
+The integration now ships profile YAML files in
+`custom_components/modbus_1ecodesign_heatpump/device_profiles/`.
+Supported dropdown profiles:
+
+- `ED300KWL`
+- `ED100KWL`
+- `ED100WL`
+- `ED180WL`
+- `ED180P`
+- `ED100RF`
+- `Froeling BWP300PV (OEM)`
+
+Findings from uploaded manuals:
+
+- The common holding/input register map is largely identical across
+  `ED100KWL`, `ED100WL`, `ED180WL`, `ED180P`, and `ED300KWL`.
+- `ED100RF` has swapped sensor semantics for input register `7/8` (`T1/T2`);
+  this is handled through profile overrides.
+- `ED compact power` manual did not expose a compatible Modbus register chapter,
+  so it is not added as selectable profile yet.
 
 ## Entity Mapping (core set)
 

@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from typing import Any
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -11,6 +12,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .device_profile import get_entity_override, is_entity_excluded
 from .entity import Modbus1EcoDesignEntity
 from .modbus import REGISTER_TYPE_HOLDING
 
@@ -24,7 +26,7 @@ class ModbusSelectDescription(SelectEntityDescription):
     register_type: str = REGISTER_TYPE_HOLDING
 
 
-SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
+BASE_SELECT_TYPES: tuple[ModbusSelectDescription, ...] = (
     ModbusSelectDescription(
         key="heating_mode",
         translation_key="heating_mode",
@@ -142,9 +144,11 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
+    profile = hass.data[DOMAIN][entry.entry_id]["profile"]
+    select_types = _build_select_types(profile)
     async_add_entities(
         Modbus1EcoDesignSelect(coordinator=coordinator, entry=entry, description=description)
-        for description in SELECT_TYPES
+        for description in select_types
     )
 
 
@@ -182,3 +186,47 @@ class Modbus1EcoDesignSelect(Modbus1EcoDesignEntity, SelectEntity):
                 )
                 return
         raise ValueError(f"Unsupported option '{option}' for {self.entity_description.key}")
+
+
+def _build_select_types(profile: dict[str, Any]) -> tuple[ModbusSelectDescription, ...]:
+    result: list[ModbusSelectDescription] = []
+    for description in BASE_SELECT_TYPES:
+        if is_entity_excluded(profile, "select", description.key):
+            continue
+        override = get_entity_override(profile, "select", description.key)
+        result.append(_apply_select_override(description, override))
+    return tuple(result)
+
+
+def _apply_select_override(
+    description: ModbusSelectDescription,
+    override: dict[str, Any],
+) -> ModbusSelectDescription:
+    if not override:
+        return description
+    allowed = {
+        "translation_key",
+        "icon",
+        "address",
+        "register_type",
+        "option_map",
+        "entity_registry_enabled_default",
+    }
+    update_data: dict[str, Any] = {key: value for key, value in override.items() if key in allowed}
+    if "address" in update_data:
+        update_data["address"] = int(update_data["address"])
+    if "register_type" in update_data:
+        update_data["register_type"] = str(update_data["register_type"]).strip().lower()
+    if "option_map" in update_data and isinstance(update_data["option_map"], dict):
+        update_data["option_map"] = {
+            int(raw): str(option) for raw, option in update_data["option_map"].items()
+        }
+    if "translation_key" in update_data:
+        update_data["translation_key"] = str(update_data["translation_key"])
+    if "icon" in update_data:
+        update_data["icon"] = str(update_data["icon"])
+    if "entity_registry_enabled_default" in update_data:
+        update_data["entity_registry_enabled_default"] = bool(
+            update_data["entity_registry_enabled_default"]
+        )
+    return replace(description, **update_data)

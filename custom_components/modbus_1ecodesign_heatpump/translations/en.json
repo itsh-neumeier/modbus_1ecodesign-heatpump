@@ -9,6 +9,7 @@
         "data": {
           "name": "Name",
           "host": "Host",
+          "device_profile": "Device profile",
           "port": "Port",
           "slave": "Modbus slave ID",
           "scan_interval": "Polling interval (seconds)",
@@ -32,6 +33,7 @@
         "title": "Connection tuning",
         "description": "Adjust polling and timeout.",
         "data": {
+          "device_profile": "Device profile",
           "scan_interval": "Polling interval (seconds)",
           "timeout": "Timeout (seconds)"
         }
@@ -51,7 +53,9 @@
     },
     "sensor": {
       "t1_evaporator_temperature": { "name": "T1 Evaporator Temperature" },
+      "t1_tank_temperature": { "name": "T1 Tank Temperature" },
       "t2_tank_temperature": { "name": "T2 Tank Temperature" },
+      "t2_evaporator_temperature": { "name": "T2 Evaporator Temperature" },
       "remaining_holiday_days": { "name": "Remaining Holiday Days" },
       "status_bits": { "name": "Status Bits" },
       "unit_alarm_bits": { "name": "Unit Alarm Bits" },
@@ -93,6 +97,8 @@
         "name": "Fan Operation",
         "state": {
           "off": "Off",
+          "ac_low": "AC Low",
+          "ac_high": "AC High",
           "ec_low": "EC Low",
           "ec_mid": "EC Mid",
           "ec_high": "EC High"

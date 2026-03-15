@@ -46,6 +46,7 @@ Waermepumpen (ED300KWL / VC200) ueber Modbus TCP.
 Beim Setup angeben:
 
 - `Host` (z. B. `192.168.140.217`)
+- `Geraeteprofil` (modellspezifisches Register-Mapping)
 - `Port` (Standard `502`)
 - `Modbus slave ID` (Standard `3`)
 - `Polling interval` in Sekunden
@@ -53,6 +54,29 @@ Beim Setup angeben:
 - Optional Name
 
 Es wird vor dem Speichern eine echte Modbus-Lesepruefung ausgefuehrt.
+
+### Geraeteprofile
+
+Die Integration nutzt jetzt externe Profil-YAMLs unter
+`custom_components/modbus_1ecodesign_heatpump/device_profiles/`.
+Auswahl im Dropdown:
+
+- `ED300KWL`
+- `ED100KWL`
+- `ED100WL`
+- `ED180WL`
+- `ED180P`
+- `ED100RF`
+- `Froeling BWP300PV (OEM)`
+
+Ergebnis der Handbuch-Analyse:
+
+- Das Register-Mapping ist bei `ED100KWL`, `ED100WL`, `ED180WL`, `ED180P`
+  und `ED300KWL` weitgehend identisch.
+- Beim `ED100RF` sind Input-Register `7/8` (`T1/T2`) in der Bedeutung
+  vertauscht; das ist jetzt per Profil-Override umgesetzt.
+- Im Handbuch `ED compact power` war kein kompatibles Modbus-Registerkapitel
+  verifizierbar, daher aktuell noch kein auswaehlbares Profil.
 
 ## Entitaeten (Kern-Mapping)
 
