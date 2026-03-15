@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.15] - 2026-03-15
+
+### Changed
+- Added optimized event-driven PV surplus automation example to README files
+  (replaces `time_pattern` polling approach).
+- Marked the example explicitly for `Victron MPPT RS450/200`.
+- Added note to adapt Victron entity IDs to local setup naming.
+
 ## [0.1.14] - 2026-03-15
 
 ### Added
@@ -174,6 +182,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.15]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.15
 [0.1.14]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.14
 [0.1.13]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.13
 [0.1.12]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.12

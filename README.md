@@ -161,20 +161,77 @@ Current baseline scans are expected to be clean for this repository version.
 
 ## Example Automations
 
-### PV surplus -> enable boost
+### PV surplus control for Victron MPPT RS450/200 (event-driven, no time pattern)
+
+This example is tailored to a Victron MPPT RS450/200 setup.
+Adjust entity IDs to your Victron integration naming.
 
 ```yaml
-automation:
-  - alias: Heatpump Boost on PV
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.heatpump_di2_pv_input
-        to: "on"
-        for: "00:05:00"
-    action:
-      - service: switch.turn_on
-        target:
-          entity_id: switch.heatpump_boost_enabled
+alias: "PV Control: Heatpump PV Mode"
+mode: single
+triggers:
+  - id: mpp1_limited
+    trigger: state
+    entity_id: sensor.victron_solarcharger_mppoperationmode_1
+    to: "LIMITED"
+    for: "00:00:10"
+  - id: mpp2_limited
+    trigger: state
+    entity_id: sensor.victron_solarcharger_mppoperationmode
+    to: "LIMITED"
+    for: "00:00:10"
+  - id: excess_lost
+    trigger: template
+    value_template: >-
+      {{
+        states('sensor.victron_battery_soc')|float(0) <= 90
+        or (
+          states('sensor.victron_solarcharger_mppoperationmode_1') != 'LIMITED'
+          and states('sensor.victron_solarcharger_mppoperationmode') != 'LIMITED'
+        )
+      }}
+    for: "00:05:00"
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id in ['mpp1_limited', 'mpp2_limited'] }}"
+          - condition: numeric_state
+            entity_id: sensor.victron_battery_soc
+            above: 90
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: sensor.victron_solarcharger_mppoperationmode_1
+                state: "LIMITED"
+              - condition: state
+                entity_id: sensor.victron_solarcharger_mppoperationmode
+                state: "LIMITED"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: select.192168140217_pv_modus
+                state: "hp_plus_el"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: select.192168140217_pv_modus
+            data:
+              option: "hp_plus_el"
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'excess_lost' }}"
+          - condition: state
+            entity_id: select.192168140217_pv_modus
+            state: "hp_plus_el"
+            for: "00:30:00"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: select.192168140217_pv_modus
+            data:
+              option: "off"
 ```
 
 ### Night quiet mode (lower fan)
