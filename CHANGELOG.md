@@ -5,6 +5,15 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.16] - 2026-03-15
+
+### Changed
+- Increased leaf icon visual size across all icon variants for better visibility
+  in Home Assistant and HACS cards:
+  - `custom_components/modbus_1ecodesign_heatpump/brand/icon*.png`
+  - `custom_components/modbus_1ecodesign_heatpump/*icon*.png`
+  - repository root `brand/icon*.png`
+
 ## [0.1.15] - 2026-03-15
 
 ### Changed
@@ -182,6 +191,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.1.16]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.16
 [0.1.15]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.15
 [0.1.14]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.14
 [0.1.13]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.1.13
