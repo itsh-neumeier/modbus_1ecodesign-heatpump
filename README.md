@@ -1,4 +1,4 @@
-# 1EcoDesign Heatpumps
+﻿# 1EcoDesign Heatpumps
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -176,7 +176,7 @@ Current baseline scans are expected to be clean for this repository version.
 ### Blueprint: Victron MPPT RS450/200 PV surplus control
 
 This repository now ships a reusable blueprint for Victron MPPT RS450/200 based
-PV surplus control of the 1EcoDesign/Fröling PV-SG operating mode.
+PV surplus control of the 1EcoDesign/Froeling PV-SG operating mode.
 
 - Blueprint file:
   `blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml`
@@ -188,10 +188,20 @@ PV surplus control of the 1EcoDesign/Fröling PV-SG operating mode.
 The blueprint lets you configure:
 
 - Battery SOC threshold
-- Two Victron MPPT operation mode sensors
+- One or more Victron MPPT operation mode sensors
 - Heatpump PV/SG select entity
 - Enable/disable hold times
-- Enable/disable select options (`hp_plus_el` / `off` by default)
+- Enable/disable select options via dropdown (`hp_plus_el` / `off` by default)
+
+Blueprint translation note:
+
+- Home Assistant blueprints do not currently offer the same full EN/DE
+  translation file workflow as custom integrations.
+- Selector option labels can be translated in some integration-backed contexts
+  via `translation_key`, but this is not a robust standalone localization
+  mechanism for blueprint names, descriptions, and input labels.
+- For that reason, this blueprint currently uses fixed UI labels and the main
+  multilingual documentation lives in `README.md` and `README.de.md`.
 
 ### Night quiet mode (lower fan)
 

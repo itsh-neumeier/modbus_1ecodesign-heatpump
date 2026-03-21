@@ -1,4 +1,4 @@
-# 1EcoDesign Heatpumps
+﻿# 1EcoDesign Heatpumps
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/)
 [![Lizenz: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -187,10 +187,20 @@ PV-SG-Betriebsmodus.
 Im Blueprint konfigurierbar:
 
 - Batterie-SOC-Schwelle
-- Zwei Victron-MPPT-Betriebsmodus-Sensoren
+- Ein oder mehrere Victron-MPPT-Betriebsmodus-Sensoren
 - Heatpump-PV/SG-Select-Entitaet
 - Einschalt-/Ausschalt-Haltezeiten
-- Select-Optionen fuer Ein/Aus (`hp_plus_el` / `off` als Standard)
+- Select-Optionen fuer Ein/Aus per Dropdown (`hp_plus_el` / `off` als Standard)
+
+Hinweis zu Uebersetzungen im Blueprint:
+
+- Home Assistant Blueprints haben aktuell nicht denselben vollwertigen
+  EN/DE-Uebersetzungs-Workflow wie Custom-Integrationen.
+- Select-Optionen koennen in bestimmten integrationsgestuetzten Kontexten zwar
+  ueber `translation_key` uebersetzt werden, das ist aber keine belastbare
+  Standalone-Loesung fuer Blueprint-Namen, Beschreibungen und Input-Labels.
+- Deshalb nutzt der Blueprint derzeit feste UI-Texte; die mehrsprachige
+  Hauptdokumentation liegt in `README.md` und `README.de.md`.
 
 ### Nachtbetrieb mit niedriger Luefterstufe
 

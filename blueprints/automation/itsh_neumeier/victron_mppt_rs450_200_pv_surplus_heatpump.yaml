@@ -3,9 +3,9 @@ blueprint:
   description: >-
     Controls the 1EcoDesign/Froeling PV-SG operating mode based on Victron MPPT
     RS450/200 surplus conditions. The heatpump PV mode is enabled when battery
-    state of charge is above the configured threshold and at least one MPPT is
-    in LIMITED mode for the configured time. PV mode is disabled again after a
-    configurable hold time once surplus is gone.
+    state of charge is above the configured threshold and at least one selected
+    MPPT is in LIMITED mode for the configured time. PV mode is disabled again
+    after a configurable hold time once surplus is gone.
   domain: automation
   source_url: >-
     https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/blob/codex/modbus_1ecodesign-heatpump-v0.1.0/blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml
@@ -15,16 +15,14 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    mppt_mode_entity_1:
-      name: MPPT operation mode sensor 1
+    mppt_mode_entities:
+      name: MPPT operation mode sensors
+      description: Select one or more Victron MPPT operation mode sensors.
       selector:
         entity:
-          domain: sensor
-    mppt_mode_entity_2:
-      name: MPPT operation mode sensor 2
-      selector:
-        entity:
-          domain: sensor
+          multiple: true
+          filter:
+            - domain: sensor
     heatpump_pv_mode_entity:
       name: Heatpump PV/SG mode select
       selector:
@@ -68,19 +66,38 @@ blueprint:
       name: Select option to enable
       default: hp_plus_el
       selector:
-        text: {}
+        select:
+          mode: dropdown
+          options:
+            - label: Off
+              value: "off"
+            - label: Only HP
+              value: only_hp
+            - label: Only EL
+              value: only_el
+            - label: HP + EL
+              value: hp_plus_el
     disable_option:
       name: Select option to disable
       default: "off"
       selector:
-        text: {}
+        select:
+          mode: dropdown
+          options:
+            - label: Off
+              value: "off"
+            - label: Only HP
+              value: only_hp
+            - label: Only EL
+              value: only_el
+            - label: HP + EL
+              value: hp_plus_el
 
 mode: single
 
 trigger_variables:
   battery_soc_entity: !input battery_soc_entity
-  mppt_mode_entity_1: !input mppt_mode_entity_1
-  mppt_mode_entity_2: !input mppt_mode_entity_2
+  mppt_mode_entities: !input mppt_mode_entities
   soc_threshold: !input battery_soc_threshold
 
 variables:
@@ -89,14 +106,9 @@ variables:
   disable_option: !input disable_option
 
 triggers:
-  - id: mppt_1_limited
+  - id: mppt_limited
     trigger: state
-    entity_id: !input mppt_mode_entity_1
-    to: "LIMITED"
-    for: !input limited_for
-  - id: mppt_2_limited
-    trigger: state
-    entity_id: !input mppt_mode_entity_2
+    entity_id: !input mppt_mode_entities
     to: "LIMITED"
     for: !input limited_for
   - id: surplus_lost
@@ -104,10 +116,10 @@ triggers:
     value_template: >-
       {{
         states(battery_soc_entity) | float(0) <= soc_threshold | float(0)
-        or (
-          states(mppt_mode_entity_1) != 'LIMITED'
-          and states(mppt_mode_entity_2) != 'LIMITED'
-        )
+        or expand(mppt_mode_entities)
+          | selectattr('state', 'eq', 'LIMITED')
+          | list
+          | count == 0
       }}
     for: !input lost_surplus_for
 
@@ -117,18 +129,18 @@ actions:
   - choose:
       - conditions:
           - condition: template
-            value_template: "{{ trigger.id in ['mppt_1_limited', 'mppt_2_limited'] }}"
+            value_template: "{{ trigger.id == 'mppt_limited' }}"
           - condition: numeric_state
             entity_id: !input battery_soc_entity
             above: !input battery_soc_threshold
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: !input mppt_mode_entity_1
-                state: "LIMITED"
-              - condition: state
-                entity_id: !input mppt_mode_entity_2
-                state: "LIMITED"
+          - condition: template
+            value_template: >-
+              {{
+                expand(mppt_mode_entities)
+                | selectattr('state', 'eq', 'LIMITED')
+                | list
+                | count > 0
+              }}
           - condition: template
             value_template: "{{ states(heatpump_pv_mode_entity) != enable_option }}"
         sequence:

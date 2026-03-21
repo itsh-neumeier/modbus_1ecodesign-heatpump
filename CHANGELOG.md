@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2026-03-21
+
+### Changed
+- Improved the Victron MPPT RS450/200 PV surplus blueprint to support one or
+  more MPPT operation-mode sensors using a multi-entity selector.
+- Replaced free-text enable/disable mode inputs with dropdown selectors for the
+  supported PV/SG mode values.
+- Updated EN/DE README documentation to describe the new blueprint behavior and
+  document current Home Assistant blueprint translation limitations.
+
 ## [0.2.4] - 2026-03-21
 
 ### Added
@@ -246,6 +256,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.2.5]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.5
 [0.2.4]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.4
 [0.2.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.3
 [0.2.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.2
