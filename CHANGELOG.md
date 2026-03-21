@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.4] - 2026-03-21
+
+### Added
+- Added reusable Home Assistant blueprint for Victron MPPT RS450/200 PV
+  surplus control:
+  `blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml`
+
+### Changed
+- Replaced the long README automation example with blueprint-based usage
+  instructions in `README.md` and `README.de.md`.
+
 ## [0.2.3] - 2026-03-15
 
 ### Added
@@ -235,6 +246,7 @@ The format is based on Keep a Changelog, and this project follows
 - GitHub CI: hassfest, linting, bandit, pip-audit, release-on-tag.
 - Dependabot and security policy.
 
+[0.2.4]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.4
 [0.2.3]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.3
 [0.2.2]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.2
 [0.2.1]: https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/releases/tag/v0.2.1

@@ -171,80 +171,26 @@ stehen zusaetzlich als Attribute zur Verfuegung.
 
 ## Beispiele fuer Automatisierungen
 
-### PV-Ueberschusssteuerung fuer Victron MPPT RS450/200 (event-basiert, ohne time_pattern)
+### Blueprint: PV-Ueberschusssteuerung fuer Victron MPPT RS450/200
 
-Dieses Beispiel ist auf ein Victron-MPPT-RS450/200-Setup ausgelegt.
-Bitte die Entity-IDs an deine Victron-Integration anpassen.
+Das Repository enthaelt jetzt einen wiederverwendbaren Blueprint fuer die
+Victron-MPPT-RS450/200-basierte PV-Ueberschusssteuerung des 1EcoDesign/Froeling
+PV-SG-Betriebsmodus.
 
-```yaml
-alias: "PV-Steuerung: BWP PV-Modus"
-mode: single
-triggers:
-  - id: mpp1_limited
-    trigger: state
-    entity_id: sensor.victron_solarcharger_mppoperationmode_1
-    to: "LIMITED"
-    for: "00:00:10"
-  - id: mpp2_limited
-    trigger: state
-    entity_id: sensor.victron_solarcharger_mppoperationmode
-    to: "LIMITED"
-    for: "00:00:10"
-  - id: ueberschuss_weg
-    trigger: template
-    value_template: >-
-      {{
-        states('sensor.victron_battery_soc')|float(0) <= 90
-        or (
-          states('sensor.victron_solarcharger_mppoperationmode_1') != 'LIMITED'
-          and states('sensor.victron_solarcharger_mppoperationmode') != 'LIMITED'
-        )
-      }}
-    for: "00:05:00"
-conditions: []
-actions:
-  - choose:
-      - conditions:
-          - condition: template
-            value_template: "{{ trigger.id in ['mpp1_limited', 'mpp2_limited'] }}"
-          - condition: numeric_state
-            entity_id: sensor.victron_battery_soc
-            above: 90
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: sensor.victron_solarcharger_mppoperationmode_1
-                state: "LIMITED"
-              - condition: state
-                entity_id: sensor.victron_solarcharger_mppoperationmode
-                state: "LIMITED"
-          - condition: not
-            conditions:
-              - condition: state
-                entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
-                state: "hp_plus_el"
-        sequence:
-          - service: select.select_option
-            target:
-              device_id: 39ab34012f47b248e4714f7e2f381909
-              entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
-            data:
-              option: "hp_plus_el"
-      - conditions:
-          - condition: template
-            value_template: "{{ trigger.id == 'ueberschuss_weg' }}"
-          - condition: state
-            entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
-            state: "hp_plus_el"
-            for: "00:30:00"
-        sequence:
-          - service: select.select_option
-            target:
-              device_id: 39ab34012f47b248e4714f7e2f381909
-              entity_id: select.froling_bwp300pv_betriebsmodus_pv_sg
-            data:
-              option: "off"
-```
+- Blueprint-Datei:
+  `blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml`
+- Direkte Import-URL:
+  `https://raw.githubusercontent.com/itsh-neumeier/modbus_1ecodesign-heatpump/codex/modbus_1ecodesign-heatpump-v0.1.0/blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml`
+- Empfohlenes Ziel fuer dein Setup:
+  `select.froling_bwp300pv_betriebsmodus_pv_sg`
+
+Im Blueprint konfigurierbar:
+
+- Batterie-SOC-Schwelle
+- Zwei Victron-MPPT-Betriebsmodus-Sensoren
+- Heatpump-PV/SG-Select-Entitaet
+- Einschalt-/Ausschalt-Haltezeiten
+- Select-Optionen fuer Ein/Aus (`hp_plus_el` / `off` als Standard)
 
 ### Nachtbetrieb mit niedriger Luefterstufe
 

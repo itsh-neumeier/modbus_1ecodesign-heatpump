@@ -1,0 +1,152 @@
+blueprint:
+  name: Victron MPPT RS450/200 PV Surplus for 1EcoDesign Heatpump
+  description: >-
+    Controls the 1EcoDesign/Froeling PV-SG operating mode based on Victron MPPT
+    RS450/200 surplus conditions. The heatpump PV mode is enabled when battery
+    state of charge is above the configured threshold and at least one MPPT is
+    in LIMITED mode for the configured time. PV mode is disabled again after a
+    configurable hold time once surplus is gone.
+  domain: automation
+  source_url: >-
+    https://github.com/itsh-neumeier/modbus_1ecodesign-heatpump/blob/codex/modbus_1ecodesign-heatpump-v0.1.0/blueprints/automation/itsh_neumeier/victron_mppt_rs450_200_pv_surplus_heatpump.yaml
+  input:
+    battery_soc_entity:
+      name: Battery state of charge sensor
+      selector:
+        entity:
+          domain: sensor
+    mppt_mode_entity_1:
+      name: MPPT operation mode sensor 1
+      selector:
+        entity:
+          domain: sensor
+    mppt_mode_entity_2:
+      name: MPPT operation mode sensor 2
+      selector:
+        entity:
+          domain: sensor
+    heatpump_pv_mode_entity:
+      name: Heatpump PV/SG mode select
+      selector:
+        entity:
+          domain: select
+    battery_soc_threshold:
+      name: Battery SOC threshold
+      default: 90
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+          mode: box
+    limited_for:
+      name: MPPT must stay LIMITED for
+      default:
+        hours: 0
+        minutes: 0
+        seconds: 10
+      selector:
+        duration: {}
+    disable_after:
+      name: Disable PV mode after surplus is gone for
+      default:
+        hours: 0
+        minutes: 30
+        seconds: 0
+      selector:
+        duration: {}
+    lost_surplus_for:
+      name: Surplus must be gone for
+      default:
+        hours: 0
+        minutes: 5
+        seconds: 0
+      selector:
+        duration: {}
+    enable_option:
+      name: Select option to enable
+      default: hp_plus_el
+      selector:
+        text: {}
+    disable_option:
+      name: Select option to disable
+      default: "off"
+      selector:
+        text: {}
+
+mode: single
+
+trigger_variables:
+  battery_soc_entity: !input battery_soc_entity
+  mppt_mode_entity_1: !input mppt_mode_entity_1
+  mppt_mode_entity_2: !input mppt_mode_entity_2
+  soc_threshold: !input battery_soc_threshold
+
+variables:
+  heatpump_pv_mode_entity: !input heatpump_pv_mode_entity
+  enable_option: !input enable_option
+  disable_option: !input disable_option
+
+triggers:
+  - id: mppt_1_limited
+    trigger: state
+    entity_id: !input mppt_mode_entity_1
+    to: "LIMITED"
+    for: !input limited_for
+  - id: mppt_2_limited
+    trigger: state
+    entity_id: !input mppt_mode_entity_2
+    to: "LIMITED"
+    for: !input limited_for
+  - id: surplus_lost
+    trigger: template
+    value_template: >-
+      {{
+        states(battery_soc_entity) | float(0) <= soc_threshold | float(0)
+        or (
+          states(mppt_mode_entity_1) != 'LIMITED'
+          and states(mppt_mode_entity_2) != 'LIMITED'
+        )
+      }}
+    for: !input lost_surplus_for
+
+conditions: []
+
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id in ['mppt_1_limited', 'mppt_2_limited'] }}"
+          - condition: numeric_state
+            entity_id: !input battery_soc_entity
+            above: !input battery_soc_threshold
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input mppt_mode_entity_1
+                state: "LIMITED"
+              - condition: state
+                entity_id: !input mppt_mode_entity_2
+                state: "LIMITED"
+          - condition: template
+            value_template: "{{ states(heatpump_pv_mode_entity) != enable_option }}"
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: !input heatpump_pv_mode_entity
+            data:
+              option: "{{ enable_option }}"
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.id == 'surplus_lost' }}"
+          - condition: state
+            entity_id: !input heatpump_pv_mode_entity
+            state: !input enable_option
+            for: !input disable_after
+        sequence:
+          - service: select.select_option
+            target:
+              entity_id: !input heatpump_pv_mode_entity
+            data:
+              option: "{{ disable_option }}"
