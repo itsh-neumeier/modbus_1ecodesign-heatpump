@@ -17,6 +17,7 @@ from .const import (
     PLATFORMS,
 )
 from .device_profile import get_device_profile
+from .endpoint import normalize_modbus_endpoint
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,9 +28,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     from .coordinator import Modbus1EcoDesignUpdateCoordinator
     from .modbus import Modbus1EcoDesignClient
 
+    host, port = normalize_modbus_endpoint(
+        host=str(entry.data[CONF_HOST]),
+        port=int(entry.data[CONF_PORT]),
+    )
+
     client = Modbus1EcoDesignClient(
-        host=entry.data[CONF_HOST],
-        port=entry.data[CONF_PORT],
+        host=host,
+        port=port,
         slave=entry.data[CONF_SLAVE],
         timeout=entry.options.get(CONF_TIMEOUT, entry.data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)),
     )

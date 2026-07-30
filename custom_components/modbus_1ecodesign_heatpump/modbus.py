@@ -7,6 +7,7 @@ import logging
 from dataclasses import dataclass
 
 from pymodbus.client import AsyncModbusTcpClient
+from pymodbus.exceptions import ModbusException
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -139,17 +140,20 @@ class Modbus1EcoDesignClient:
     ):
         """Read input registers across pymodbus API variants."""
         try:
-            return await client.read_input_registers(
-                address=address,
-                count=count,
-                device_id=self._slave,
-            )
-        except TypeError:
-            return await client.read_input_registers(
-                address=address,
-                count=count,
-                slave=self._slave,
-            )
+            try:
+                return await client.read_input_registers(
+                    address=address,
+                    count=count,
+                    device_id=self._slave,
+                )
+            except TypeError:
+                return await client.read_input_registers(
+                    address=address,
+                    count=count,
+                    slave=self._slave,
+                )
+        except (ModbusException, OSError) as err:
+            raise ModbusReadError(str(err)) from err
 
     async def _async_read_holding_registers(
         self,
@@ -159,17 +163,20 @@ class Modbus1EcoDesignClient:
     ):
         """Read holding registers across pymodbus API variants."""
         try:
-            return await client.read_holding_registers(
-                address=address,
-                count=count,
-                device_id=self._slave,
-            )
-        except TypeError:
-            return await client.read_holding_registers(
-                address=address,
-                count=count,
-                slave=self._slave,
-            )
+            try:
+                return await client.read_holding_registers(
+                    address=address,
+                    count=count,
+                    device_id=self._slave,
+                )
+            except TypeError:
+                return await client.read_holding_registers(
+                    address=address,
+                    count=count,
+                    slave=self._slave,
+                )
+        except (ModbusException, OSError) as err:
+            raise ModbusReadError(str(err)) from err
 
     async def _async_write_register(
         self,
@@ -179,17 +186,20 @@ class Modbus1EcoDesignClient:
     ):
         """Write a register across pymodbus API variants."""
         try:
-            return await client.write_register(
-                address=address,
-                value=value,
-                device_id=self._slave,
-            )
-        except TypeError:
-            return await client.write_register(
-                address=address,
-                value=value,
-                slave=self._slave,
-            )
+            try:
+                return await client.write_register(
+                    address=address,
+                    value=value,
+                    device_id=self._slave,
+                )
+            except TypeError:
+                return await client.write_register(
+                    address=address,
+                    value=value,
+                    slave=self._slave,
+                )
+        except (ModbusException, OSError) as err:
+            raise ModbusWriteError(str(err)) from err
 
     async def _async_get_client(self) -> AsyncModbusTcpClient:
         """Return a connected AsyncModbusTcpClient."""
@@ -201,7 +211,13 @@ class Modbus1EcoDesignClient:
             )
 
         if not self._client.connected:
-            connected = await self._client.connect()
+            try:
+                connected = await self._client.connect()
+            except (ModbusException, OSError) as err:
+                raise ModbusConnectionError(
+                    f"Could not connect to {self._host}:{self._port} "
+                    f"(slave={self._slave}): {err}"
+                ) from err
             if not connected:
                 raise ModbusConnectionError(
                     f"Could not connect to {self._host}:{self._port} (slave={self._slave})"

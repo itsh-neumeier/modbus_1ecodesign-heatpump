@@ -7,6 +7,7 @@ import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PORT, CONF_SCAN_INTERVAL, CONF_TIMEOUT
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
 
@@ -23,6 +24,7 @@ from .const import (
     MIN_SCAN_INTERVAL,
 )
 from .device_profile import get_profile_selector_options
+from .endpoint import normalize_modbus_endpoint
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,6 +37,10 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input: dict[str, object] | None = None) -> FlowResult:
         errors: dict[str, str] = {}
         if user_input is not None:
+            host, port = normalize_modbus_endpoint(
+                host=str(user_input[CONF_HOST]),
+                port=int(user_input[CONF_PORT]),
+            )
             try:
                 from .modbus import (
                     ModbusConnectionError,
@@ -51,8 +57,8 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             try:
                 await async_validate_connection(
-                    host=str(user_input[CONF_HOST]),
-                    port=int(user_input[CONF_PORT]),
+                    host=host,
+                    port=port,
                     slave=int(user_input[CONF_SLAVE]),
                     timeout=int(user_input[CONF_TIMEOUT]),
                 )
@@ -64,18 +70,15 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.exception("Unexpected error during Modbus validation")
                 errors["base"] = "unknown"
             else:
-                unique_id = (
-                    f"{user_input[CONF_HOST]}:{user_input[CONF_PORT]}:"
-                    f"{user_input[CONF_SLAVE]}"
-                )
+                unique_id = f"{host}:{port}:{user_input[CONF_SLAVE]}"
                 await self.async_set_unique_id(unique_id)
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=str(user_input[CONF_NAME]),
                     data={
                         CONF_NAME: str(user_input[CONF_NAME]),
-                        CONF_HOST: str(user_input[CONF_HOST]),
-                        CONF_PORT: int(user_input[CONF_PORT]),
+                        CONF_HOST: host,
+                        CONF_PORT: port,
                         CONF_SLAVE: int(user_input[CONF_SLAVE]),
                         CONF_DEVICE_PROFILE: str(user_input[CONF_DEVICE_PROFILE]),
                         CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
@@ -90,6 +93,7 @@ class Modbus1EcoDesignConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     @staticmethod
+    @callback
     def async_get_options_flow(
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:

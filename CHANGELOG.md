@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on Keep a Changelog, and this project follows
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6] - 2026-07-30
+
+### Fixed
+- Handle current `pymodbus` I/O exceptions as integration read/write errors
+  instead of letting them escape as unexpected Home Assistant setup/update
+  failures.
+- Avoid opening a separate TCP probe connection before each Modbus poll, which
+  can interfere with gateways that only tolerate one active Modbus TCP client.
+- Accept Modbus endpoints entered as `host:port` or URL and normalize them to
+  separate host and port values before connecting.
+- Mark the options flow callback according to current Home Assistant developer
+  conventions.
+
 ## [0.2.5] - 2026-03-21
 
 ### Changed

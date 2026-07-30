@@ -10,6 +10,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DEFAULT_NAME, DOMAIN
 from .coordinator import Modbus1EcoDesignUpdateCoordinator
 from .device_profile import get_profile_manufacturer, get_profile_model
+from .endpoint import normalize_modbus_endpoint
 
 
 class Modbus1EcoDesignEntity(CoordinatorEntity[Modbus1EcoDesignUpdateCoordinator]):
@@ -30,13 +31,17 @@ class Modbus1EcoDesignEntity(CoordinatorEntity[Modbus1EcoDesignUpdateCoordinator
     @property
     def device_info(self) -> DeviceInfo:
         profile = self.coordinator.profile
+        host, _ = normalize_modbus_endpoint(
+            host=str(self._entry.data[CONF_HOST]),
+            port=80,
+        )
         return DeviceInfo(
             identifiers={(DOMAIN, self._entry.entry_id)},
             via_device=gateway_device_identifier(self._entry),
             name=self._entry.data.get(CONF_NAME, DEFAULT_NAME),
             manufacturer=get_profile_manufacturer(profile),
             model=get_profile_model(profile),
-            configuration_url=f"http://{self._entry.data[CONF_HOST]}:80",
+            configuration_url=f"http://{host}:80",
         )
 
     def _read_register(self, register_type: str, address: int) -> int | None:
@@ -61,4 +66,8 @@ def gateway_device_name(entry: ConfigEntry) -> str:
 
 def gateway_configuration_url(entry: ConfigEntry) -> str:
     """Gateway HTTP page for visit button."""
-    return f"http://{entry.data[CONF_HOST]}:80"
+    host, _ = normalize_modbus_endpoint(
+        host=str(entry.data[CONF_HOST]),
+        port=80,
+    )
+    return f"http://{host}:80"
